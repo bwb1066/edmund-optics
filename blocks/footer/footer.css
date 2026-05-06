@@ -1,20 +1,290 @@
+/* ── Footer shell ── */
 footer {
-  background-color: var(--light-color);
-  font-size: var(--body-font-size-xs);
+  font-size: 14px;
+  line-height: 1.6;
+  font-family: var(--body-font-family);
 }
 
-footer .footer > div {
-  margin: auto;
+/* ── Sign-up strip ── */
+footer .footer-signup {
+  background-color: #292929;
+  border-bottom: 1px solid #585858;
+}
+
+footer .footer-signup .default-content-wrapper {
   max-width: 1200px;
-  padding: 40px 24px 24px;
+  margin: 0 auto;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
 }
 
-footer .footer p {
+footer .footer-signup p {
+  margin: 0;
+  color: #bbb;
+  font-size: 15px;
+}
+
+footer .footer-signup p strong {
+  color: #fff;
+}
+
+footer .footer-signup .button-wrapper {
+  flex-shrink: 0;
   margin: 0;
 }
 
+/* ── Nav section ── */
+footer .footer-nav {
+  background-color: #292929;
+  color: #bbb;
+  border-bottom: 1px solid #585858;
+}
+
+footer .footer-nav .default-content-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 24px 52px;
+}
+
+footer .footer-nav-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+}
+
+footer .footer-nav-heading {
+  color: #fff;
+  font-weight: 700;
+  font-size: 15px;
+  margin: 0 0 16px;
+}
+
+footer .footer-nav-heading a {
+  color: inherit;
+  text-decoration: none;
+}
+
+footer .footer-nav-col ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 28px;
+}
+
+footer .footer-nav-col ul li {
+  margin-bottom: 10px;
+}
+
+footer .footer-nav-col a {
+  color: #bbb;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+/* Hiring CTA — authored as <strong><a> in the CMS */
+footer .footer-nav-col .button-wrapper {
+  margin-top: 16px;
+}
+
+footer .footer-nav-col .button.primary {
+  background-color: #00f;
+  border-color: #00f;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 9px 16px;
+  border-radius: 4px;
+}
+
+footer .footer-nav-col .button.primary::after {
+  content: ' \00BB\00BB';
+  letter-spacing: -0.05em;
+}
+
+footer .footer-signup .button.primary {
+  background-color: var(--cta-color);
+  border-color: var(--cta-color);
+  color: #111;
+  font-weight: 700;
+}
+
+footer .footer-nav-col .button.primary:hover {
+  background-color: #00c;
+  border-color: #00c;
+}
+
+footer .footer-signup .button.primary:hover {
+  background-color: var(--cta-color-hover);
+  border-color: var(--cta-color-hover);
+}
+
+/* ── Legal section ── */
+footer .footer-legal {
+  background-color: #292929;
+  border-top: 1px solid #585858;
+  color: #aaa;
+  font-size: 13px;
+}
+
+footer .footer-legal .default-content-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 28px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+footer .footer-legal-left p {
+  margin: 0 0 6px;
+}
+
+/* Tagline — authored in CMS as last <p> in the legal section */
+footer .footer-legal-right > p {
+  color: #fff;
+  font-size: 17px;
+  font-weight: 300;
+  margin: 0;
+}
+
+footer .footer-legal-right > p strong {
+  font-weight: 800;
+}
+
+footer .footer-certs p {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin: 0;
+}
+
+footer .footer-legal-left p:first-child {
+  color: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+footer .footer-legal-left a {
+  color: #aaa;
+  text-decoration: none;
+}
+
+/* Social icons */
+footer .footer-social {
+  list-style: none;
+  margin: 0 0 16px;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+footer .footer-social a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  color: #fff;
+  text-decoration: none;
+  overflow: hidden;
+  line-height: 0;
+}
+
+footer .footer-social picture {
+  display: block;
+  line-height: 0;
+}
+
+footer .footer-social img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  transition: filter 0.15s;
+}
+
+footer .footer-certs img {
+  max-height: 75px;
+  width: auto;
+  object-fit: contain;
+}
+
+footer .footer-legal-left a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+footer .footer-social a:hover img {
+  filter: none;
+}
+
+/* ── Certifications section ── */
+footer .footer-certs {
+  background-color: #fff;
+  border-top: 1px solid #e0e0e0;
+}
+
+footer .footer-certs .default-content-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 24px 40px;
+  text-align: center;
+}
+
+footer .footer-nav-col a:hover,
+footer .footer-nav-heading a:hover {
+  color: #fff;
+}
+
+/* ── Tablet (600px+) ── */
+@media (width >= 600px) {
+  footer .footer-nav-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  footer .footer-legal .default-content-wrapper {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  footer .footer-legal-left {
+    flex: 1 1 auto;
+    max-width: 58%;
+  }
+
+  footer .footer-legal-right {
+    flex: 0 0 auto;
+    align-items: flex-end;
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+/* ── Desktop (900px+) ── */
 @media (width >= 900px) {
-  footer .footer > div {
-    padding: 40px 32px 24px;
+  footer .footer-nav .default-content-wrapper {
+    padding: 52px 32px;
+  }
+
+  footer .footer-nav-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+  }
+
+  footer .footer-legal .default-content-wrapper {
+    padding: 28px 32px;
+  }
+
+  footer .footer-certs .default-content-wrapper {
+    padding: 48px 32px 40px;
   }
 }

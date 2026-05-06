@@ -3,25 +3,79 @@
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(257px, 1fr));
-  gap: 24px;
-}
-
-.cards > ul > li {
-  border: 1px solid #dadada;
-  background-color: var(--background-color);
-}
-
-.cards .cards-card-body {
-  margin: 16px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px 12px;
 }
 
 .cards .cards-card-image {
   line-height: 0;
 }
 
-.cards > ul > li img {
+.cards .cards-card-image picture {
+  display: block;
+}
+
+.cards .cards-card-image img {
   width: 100%;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 1;
   object-fit: cover;
+  border-radius: 16px;
+  transition: opacity 0.2s;
+}
+
+.cards .cards-card-body {
+  padding: 10px 4px 0;
+  text-align: center;
+}
+
+.cards .cards-card-body p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--text-color);
+}
+
+.cards .cards-all-products {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cards > ul > li > a {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.cards .cards-all-products > a {
+  color: var(--cta-color);
+  font-size: 15px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.cards .cards-all-products > a::after {
+  content: ' \00BB\00BB';
+  letter-spacing: -0.05em;
+}
+
+.cards > ul > li > a:hover .cards-card-image img {
+  opacity: 0.8;
+}
+
+.cards .cards-all-products > a:hover {
+  text-decoration: underline;
+}
+
+@media (width >= 600px) {
+  .cards > ul {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px 16px;
+  }
+}
+
+@media (width >= 900px) {
+  .cards > ul {
+    grid-template-columns: repeat(6, 1fr);
+    gap: 28px 20px;
+  }
 }
