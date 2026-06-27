@@ -137,7 +137,9 @@ async function loadEager(doc) {
   if (main) {
     decorateMain(main);
     document.body.classList.add('appear');
-    await loadSection(main.querySelector('.section'), waitForFirstImage);
+    const section = main.querySelector('.section');
+    const isQuickEdit = new URLSearchParams(window.location.search).has('quick-edit');
+    await loadSection(section, isQuickEdit ? null : waitForFirstImage);
   }
 
   try {
@@ -180,10 +182,18 @@ function loadDelayed() {
   // load anything that can be postponed to the latest here
 }
 
-async function loadPage() {
+export async function loadPage() {
   await loadEager(document);
   await loadLazy(document);
   loadDelayed();
 }
 
 loadPage();
+(function da() {
+  const { searchParams } = new URL(window.location.href);
+  const hasPreview = searchParams.has('dapreview');
+  // eslint-disable-next-line import/no-unresolved
+  if (hasPreview) import('../tools/da/da.js').then((mod) => mod.default(loadPage));
+  const hasQE = searchParams.has('quick-edit');
+  if (hasQE) import('../tools/quick-edit/quick-edit.js').then((mod) => mod.default());
+}());
