@@ -29,17 +29,34 @@
 }
 
 .primary-hero h1 {
-  font-size: clamp(30px, 6vw, 58px);
+  font-size: clamp(28px, 4.5vw, 48px);
   font-weight: 300;
-  line-height: 1.1;
+  line-height: 1.15;
   color: #fff;
-  margin: 0 0 28px;
-  text-transform: uppercase;
+  margin: 0;
   letter-spacing: 0.01em;
 }
 
 .primary-hero h1 strong {
   font-weight: 800;
+}
+
+/* Second heading line (wrap in _em_ in the document) renders as teal */
+.primary-hero h1 em {
+  font-style: normal;
+  color: #2a9d8f;
+  display: block;
+}
+
+/* Teal rule beneath the heading */
+.primary-hero h1::after {
+  content: '';
+  display: block;
+  width: 36px;
+  height: 3px;
+  background: #2a9d8f;
+  margin-top: 20px;
+  margin-bottom: 24px;
 }
 
 .primary-hero h3 {

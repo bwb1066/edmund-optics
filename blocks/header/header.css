@@ -25,7 +25,7 @@ header nav p {
   line-height: 1;
 }
 
-header nav a {
+header nav a:any-link {
   color: #fff;
   text-decoration: none;
 }
@@ -440,7 +440,7 @@ header .nav-sections ul > li > ul > li {
     font-size: 13px;
   }
 
-  /* Shop ≡ icon on first nav item */
+  /* Shop ≡ icon on first nav item — no dropdown chevron */
   header .nav-sections .default-content-wrapper > ul > li:first-child {
     padding-left: 0;
   }
@@ -451,5 +451,9 @@ header .nav-sections ul > li > ul > li {
     margin-right: 6px;
     font-weight: 400;
     line-height: 1;
+  }
+
+  header .nav-sections .default-content-wrapper > ul > li:first-child.nav-drop::after {
+    display: none;
   }
 }

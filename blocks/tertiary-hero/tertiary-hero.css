@@ -32,14 +32,16 @@
 
 .tertiary-hero h1 {
   font-size: 28px;
-  font-weight: 700;
+  font-weight: 800;
   color: #fff;
   margin: 0;
   line-height: 1.1;
-  text-shadow: 0 2px 8px rgb(0 0 0 / 40%);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  text-shadow: 0 2px 12px rgb(0 0 0 / 50%);
 }
 
-.tertiary-hero h1 a {
+.tertiary-hero h1 a:any-link {
   color: #fff;
   text-decoration: none;
 }
