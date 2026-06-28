@@ -43,13 +43,13 @@ header .nav-topbar {
 /* ── Hamburger ── */
 header .nav-hamburger {
   flex-shrink: 0;
-  height: 22px;
+  height: 36px;
   display: flex;
   align-items: center;
 }
 
 header .nav-hamburger button {
-  height: 22px;
+  height: 36px;
   margin: 0;
   border: 0;
   border-radius: 0;
@@ -68,7 +68,7 @@ header .nav-hamburger-icon::after {
   box-sizing: border-box;
   display: block;
   position: relative;
-  width: 20px;
+  width: 30px;
 }
 
 header .nav-hamburger-icon::before,
@@ -81,21 +81,21 @@ header .nav-hamburger-icon::after {
 header nav[aria-expanded='false'] .nav-hamburger-icon,
 header nav[aria-expanded='false'] .nav-hamburger-icon::before,
 header nav[aria-expanded='false'] .nav-hamburger-icon::after {
-  height: 2px;
+  height: 3px;
   border-radius: 2px;
   background: currentcolor;
 }
 
 header nav[aria-expanded='false'] .nav-hamburger-icon::before {
-  top: -6px;
+  top: -9px;
 }
 
 header nav[aria-expanded='false'] .nav-hamburger-icon::after {
-  top: 6px;
+  top: 9px;
 }
 
 header nav[aria-expanded='true'] .nav-hamburger-icon {
-  height: 22px;
+  height: 36px;
 }
 
 header nav[aria-expanded='true'] .nav-hamburger-icon::before,
@@ -447,8 +447,8 @@ header .nav-sections ul > li > ul > li {
 
   header .nav-sections .default-content-wrapper > ul > li:first-child::before {
     content: '\2261';
-    font-size: 18px;
-    margin-right: 6px;
+    font-size: 24px;
+    margin-right: 8px;
     font-weight: 400;
     line-height: 1;
   }
