@@ -5,7 +5,7 @@ header {
 
 /* ── Wrapper ── */
 header .nav-wrapper {
-  background-color: #111;
+  background-color: #333;
   width: 100%;
   z-index: 200;
   position: sticky;
@@ -262,7 +262,7 @@ header .nav-sections ul > li > ul > li {
     visibility: visible;
     position: fixed;
     inset: var(--nav-height) 0 0 0;
-    background-color: #111;
+    background-color: #333;
     overflow-y: auto;
     z-index: 190;
     padding: 20px;
@@ -294,8 +294,8 @@ header .nav-sections ul > li > ul > li {
     visibility: visible;
     align-items: center;
     justify-content: space-between;
-    background-color: #1c1c1c;
-    border-top: 1px solid #2d2d2d;
+    background-color: #333;
+    border-top: 1px solid #444;
     padding: 0 32px;
     height: 44px;
   }
@@ -415,7 +415,7 @@ header .nav-sections ul > li > ul > li {
     top: 100%;
     width: 200px;
     padding: 16px;
-    background-color: #1c1c1c;
+    background-color: #333;
     white-space: initial;
     z-index: 100;
   }
@@ -429,7 +429,7 @@ header .nav-sections ul > li > ul > li {
     height: 0;
     border-left: 8px solid transparent;
     border-right: 8px solid transparent;
-    border-bottom: 8px solid #1c1c1c;
+    border-bottom: 8px solid #333;
   }
 
   header .nav-sections .default-content-wrapper > ul > li > ul > li {
@@ -447,7 +447,7 @@ header .nav-sections ul > li > ul > li {
 
   header .nav-sections .default-content-wrapper > ul > li:first-child::before {
     content: '\2261';
-    font-size: 24px;
+    font-size: 16px;
     margin-right: 8px;
     font-weight: 400;
     line-height: 1;
