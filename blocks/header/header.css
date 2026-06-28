@@ -4,17 +4,13 @@ header {
 }
 
 /* ── Wrapper ── */
+/* Top bar height = 64px (--nav-height), sections bar below gets #333 */
 header .nav-wrapper {
-  background-color: #333;
+  background: linear-gradient(to bottom, #000 var(--nav-height), #333 var(--nav-height));
   width: 100%;
   z-index: 200;
   position: sticky;
   top: 0;
-}
-
-/* Top bar (logo / search / util) sits on black */
-header .nav-topbar {
-  background-color: #000;
 }
 
 /* ── Nav container ── */
@@ -403,8 +399,12 @@ header .nav-sections ul > li > ul > li {
     height: 44px;
     display: flex;
     align-items: center;
-    font-size: 14px;
-    font-weight: 500;
+    font-family: "sofia w01 Bold", Helvetica, Arial, sans-serif;
+    font-style: normal;
+    font-weight: 800;
+    font-size: 15px;
+    line-height: 21px;
+    color: rgb(0 0 0);
   }
 
   header .nav-sections .default-content-wrapper > ul > li > ul {
