@@ -5,7 +5,7 @@ header {
 
 /* ── Wrapper ── */
 header .nav-wrapper {
-  background-color: #333;
+  background-color: #000;
   width: 100%;
   z-index: 200;
   position: sticky;
@@ -262,7 +262,7 @@ header .nav-sections ul > li > ul > li {
     visibility: visible;
     position: fixed;
     inset: var(--nav-height) 0 0 0;
-    background-color: #333;
+    background-color: #000;
     overflow-y: auto;
     z-index: 190;
     padding: 20px;
