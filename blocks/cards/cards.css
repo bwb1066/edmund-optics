@@ -17,7 +17,7 @@
 
 .cards .cards-card-image img {
   width: 100%;
-  aspect-ratio: 1;
+  aspect-ratio: 6 / 5;
   object-fit: cover;
   border-radius: 16px;
   transition: opacity 0.2s;
@@ -30,8 +30,10 @@
 
 .cards .cards-card-body p {
   margin: 0;
-  font-size: 14px;
-  color: var(--text-color);
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 27px;
+  color: rgb(0, 0, 0);
 }
 
 .cards .cards-all-products {
@@ -47,15 +49,16 @@
 }
 
 .cards .cards-all-products > a {
-  color: var(--cta-color);
-  font-size: 15px;
-  font-weight: 700;
+  color: rgb(0, 0, 0);
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 27px;
   text-decoration: none;
 }
 
 .cards .cards-all-products > a::after {
-  content: ' \00BB\00BB';
-  letter-spacing: -0.05em;
+  content: ' \00BB';
+  color: var(--cta-color);
 }
 
 .cards > ul > li > a:hover .cards-card-image img {

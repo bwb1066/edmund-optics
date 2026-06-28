@@ -1,0 +1,106 @@
+.featured-event-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  background-color: #000;
+  min-height: 220px;
+}
+
+.featured-event-hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  line-height: 0;
+}
+
+.featured-event-hero-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: right center;
+}
+
+/* Fade left edge to black so text is readable */
+.featured-event-hero-bg::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, #000 40%, rgba(0 0 0 / 60%) 65%, transparent 85%);
+}
+
+.featured-event-hero > div {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+}
+
+.featured-event-hero-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+  padding: 36px 40px;
+  max-width: 55%;
+  min-height: 220px;
+  box-sizing: border-box;
+}
+
+/* "FEATURED EVENT" label */
+.featured-event-label {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fff;
+  opacity: 0.8;
+}
+
+/* Main headline */
+.featured-event-hero h1,
+.featured-event-hero h2 {
+  margin: 0;
+  font-size: clamp(20px, 2.2vw, 32px);
+  font-weight: 700;
+  line-height: 1.2;
+  color: #fff;
+}
+
+.featured-event-hero h1 a:any-link,
+.featured-event-hero h2 a:any-link {
+  color: #fff;
+  text-decoration: none;
+}
+
+/* CTA button */
+.featured-event-cta {
+  margin: 4px 0 0;
+}
+
+.featured-event-cta a:any-link {
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--cta-color);
+  color: #111;
+  font-weight: 700;
+  font-size: 15px;
+  padding: 12px 24px;
+  border-radius: 50px;
+  text-decoration: none;
+  transition: background-color 0.15s;
+}
+
+.featured-event-cta a:hover {
+  background-color: var(--cta-color-hover);
+}
+
+@media (width >= 900px) {
+  .featured-event-hero-content {
+    padding: 40px 52px;
+  }
+
+  .featured-event-hero h1,
+  .featured-event-hero h2 {
+    font-size: clamp(24px, 2.5vw, 36px);
+  }
+}

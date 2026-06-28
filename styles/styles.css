@@ -43,6 +43,9 @@
 
   /* nav height */
   --nav-height: 64px;
+
+  /* page content margins */
+  --page-margin: 20px;
 }
 
 @media (width >= 900px) {
@@ -59,6 +62,9 @@
     --heading-font-size-m: 22px;
     --heading-font-size-s: 20px;
     --heading-font-size-xs: 18px;
+
+    /* page content margins */
+    --page-margin: 10%;
   }
 }
 
@@ -293,20 +299,15 @@ main > .section {
 }
 
 main > .section > div {
-  max-width: 1200px;
-  margin: auto;
-  padding: 0 24px;
+  max-width: none;
+  margin: 0;
+  padding: 0 var(--page-margin);
 }
 
 main > .section:first-of-type {
   margin-top: 0;
 }
 
-@media (width >= 900px) {
-  main > .section > div {
-    padding: 0 32px;
-  }
-}
 
 /* section metadata */
 main .section.light,
