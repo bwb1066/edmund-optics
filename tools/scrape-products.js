@@ -67,7 +67,7 @@ async function scrapeProduct(page, url) {
           if (imageUrl) break;
         }
       }
-      if (imageUrl.startsWith('//')) imageUrl = 'https:' + imageUrl;
+      if (imageUrl.startsWith('//')) imageUrl = `https:${imageUrl}`;
       imageUrl = imageUrl.split('?')[0]; // strip query params
 
       // Description — prefer structured data, then visible text
@@ -137,7 +137,7 @@ async function processQueue(pages, queue, results, total) {
 
   // === Phase 1: get product URLs from sitemap ===
   const sitemapPage = await ctx.newPage();
-  let allUrls = await fetchSitemapProductUrls(sitemapPage);
+  const allUrls = await fetchSitemapProductUrls(sitemapPage);
   log(`Sitemap: ${allUrls.length} product URLs found`);
 
   if (allUrls.length === 0) {

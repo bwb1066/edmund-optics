@@ -18,16 +18,17 @@
   object-fit: cover;
 }
 
-.tertiary-hero > div {
-  position: relative;
+.tertiary-hero-content {
+  position: absolute;
+  inset: 0;
   z-index: 1;
-  height: 100%;
   display: flex;
-  align-items: flex-end;
-}
-
-.tertiary-hero > div > div {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
   padding: 24px 28px;
+  box-sizing: border-box;
 }
 
 .tertiary-hero h1 {
@@ -56,7 +57,7 @@
     min-height: 0;
   }
 
-  .tertiary-hero > div > div {
+  .tertiary-hero-content {
     padding: 28px 32px;
   }
 

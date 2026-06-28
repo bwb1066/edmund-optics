@@ -39,6 +39,12 @@
 
 .primary-hero h1 strong {
   font-weight: 800;
+  color: #2a9d8f;
+}
+
+/* First line ("Your Vision.") is white; the second line stays teal */
+.primary-hero h1 strong:first-of-type {
+  color: #fff;
 }
 
 /* Second heading line (wrap in _em_ in the document) renders as teal */
@@ -111,6 +117,18 @@
   }
 }
 
+/* ── Mobile: inset the stacked hero cards from the screen edges with gaps ── */
+@media (width < 900px) {
+  main > .section.hero-grid > div {
+    padding: 0 16px;
+    margin-bottom: 16px;
+  }
+
+  main > .section.hero-grid > div:last-child {
+    margin-bottom: 0;
+  }
+}
+
 /* ── Hero grid: section containing primary + secondary + tertiary heroes ── */
 @media (width >= 900px) {
   main > .section.hero-grid {
@@ -136,6 +154,22 @@
 
   main > .section.hero-grid .primary-hero {
     height: 100%;
+    min-height: 0;
+  }
+
+  /* Secondary/tertiary hero wrappers: give them a positioning context so the
+     block can fill them via position:absolute;inset:0 — this guarantees a
+     definite height regardless of how the browser resolves 1fr grid tracks. */
+  main > .section.hero-grid > .secondary-hero-wrapper,
+  main > .section.hero-grid > .tertiary-hero-wrapper {
+    position: relative;
+  }
+
+  main > .section.hero-grid > .secondary-hero-wrapper > .secondary-hero,
+  main > .section.hero-grid > .tertiary-hero-wrapper > .tertiary-hero {
+    position: absolute;
+    inset: 0;
+    height: auto;
     min-height: 0;
   }
 

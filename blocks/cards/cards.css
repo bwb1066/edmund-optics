@@ -1,45 +1,35 @@
+/* ── Mobile: single centered list, images hidden ── */
 .cards > ul {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px 12px;
+  grid-template-columns: 1fr;
+  gap: 0;
 }
 
 .cards .cards-card-image {
-  line-height: 0;
-}
-
-.cards .cards-card-image picture {
-  display: block;
-}
-
-.cards .cards-card-image img {
-  width: 100%;
-  aspect-ratio: 6 / 5;
-  object-fit: cover;
-  border-radius: 16px;
-  transition: opacity 0.2s;
+  display: none;
 }
 
 .cards .cards-card-body {
-  padding: 10px 4px 0;
+  padding: 14px 0;
   text-align: center;
 }
 
 .cards .cards-card-body p {
   margin: 0;
   font-size: 18px;
-  font-weight: 800;
-  line-height: 27px;
-  color: rgb(0, 0, 0);
+  font-weight: 600;
+  line-height: 1.4;
+  color: #000;
 }
 
 .cards .cards-all-products {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 16px 0;
 }
 
 .cards > ul > li > a {
@@ -49,7 +39,7 @@
 }
 
 .cards .cards-all-products > a {
-  color: rgb(0, 0, 0);
+  color: #000;
   font-size: 18px;
   font-weight: 800;
   line-height: 27px;
@@ -61,21 +51,50 @@
   color: var(--cta-color);
 }
 
-.cards > ul > li > a:hover .cards-card-image img {
-  opacity: 0.8;
-}
-
 .cards .cards-all-products > a:hover {
   text-decoration: underline;
 }
 
+/* ── 600px+: 3-column image grid ── */
 @media (width >= 600px) {
   .cards > ul {
     grid-template-columns: repeat(3, 1fr);
     gap: 24px 16px;
   }
+
+  .cards .cards-card-image {
+    display: block;
+    line-height: 0;
+  }
+
+  .cards .cards-card-image picture {
+    display: block;
+  }
+
+  .cards .cards-card-image img {
+    width: 100%;
+    aspect-ratio: 6 / 5;
+    object-fit: cover;
+    border-radius: 16px;
+    transition: opacity 0.2s;
+  }
+
+  .cards .cards-card-body {
+    padding: 10px 4px 0;
+  }
+
+  .cards .cards-card-body p {
+    font-size: 18px;
+    font-weight: 800;
+    line-height: 27px;
+  }
+
+  .cards > ul > li > a:hover .cards-card-image img {
+    opacity: 0.8;
+  }
 }
 
+/* ── 900px+: 6-column image grid ── */
 @media (width >= 900px) {
   .cards > ul {
     grid-template-columns: repeat(6, 1fr);

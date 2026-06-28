@@ -1,0 +1,138 @@
+.knowledge-base-hero {
+  --kb-yellow: #ffc629;
+
+  padding: 56px 0 40px;
+  text-align: center;
+}
+
+/* Full-bleed bottom border spanning the whole page width, flush below. */
+main > .section:has(.knowledge-base-hero) {
+  margin-bottom: 0;
+  border-bottom: 4px solid #ffc629;
+}
+
+/* ── Header ─────────────────────────────────────────────────────────── */
+.knowledge-base-hero .kb-head {
+  max-width: 860px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.knowledge-base-hero .kb-eyebrow {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: #1a1a1a;
+}
+
+.knowledge-base-hero .kb-title {
+  margin: 0;
+  font-family: sofia-pro, Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  font-size: clamp(44px, 7vw, 72px);
+  line-height: 0.94;
+  color: #000;
+}
+
+.knowledge-base-hero .kb-sub {
+  margin: 0;
+  font-size: clamp(18px, 2.2vw, 24px);
+  line-height: 1.35;
+  color: #333;
+}
+
+.knowledge-base-hero .kb-cta {
+  display: inline-block;
+  margin-top: 6px;
+  background: var(--kb-yellow);
+  color: #1a1a1a;
+  font-weight: 700;
+  font-size: 16px;
+  padding: 12px 26px;
+  border-radius: 999px;
+  text-decoration: none;
+}
+
+.knowledge-base-hero .kb-cta:hover {
+  filter: brightness(0.95);
+}
+
+/* ── Cards ──────────────────────────────────────────────────────────── */
+.knowledge-base-hero .kb-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  margin-top: 40px;
+  text-align: left;
+}
+
+@media (width >= 600px) {
+  .knowledge-base-hero .kb-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (width >= 900px) {
+  .knowledge-base-hero .kb-cards {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.knowledge-base-hero .kb-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e6e6e6;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.knowledge-base-hero .kb-card-media {
+  display: block;
+  line-height: 0;
+  border-bottom: 4px solid var(--kb-yellow);
+  background: #fff;
+}
+
+.knowledge-base-hero .kb-card-media img {
+  width: 100%;
+  height: 170px;
+  object-fit: cover;
+  display: block;
+}
+
+.knowledge-base-hero .kb-card-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  align-self: flex-start;
+  margin: 16px 0 0 18px;
+  padding: 3px 8px;
+  background: var(--kb-yellow);
+  color: #1a1a1a;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-radius: 3px;
+}
+
+.knowledge-base-hero .kb-card-title {
+  margin: 10px 18px 22px;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.knowledge-base-hero .kb-card-title a:any-link {
+  color: #1565d8;
+  text-decoration: none;
+}
+
+.knowledge-base-hero .kb-card-title a:hover {
+  text-decoration: underline;
+}

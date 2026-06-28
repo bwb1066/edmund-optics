@@ -4,11 +4,12 @@ header {
 }
 
 /* ── Wrapper ── */
-/* Top bar height = 64px (--nav-height), sections bar below gets #333 */
+
+/* Gradient splits: top 64px = black (topbar), below = #333 (sections bar) */
 header .nav-wrapper {
   background: linear-gradient(to bottom, #000 var(--nav-height), #333 var(--nav-height));
   width: 100%;
-  z-index: 200;
+  z-index: 1000;
   position: sticky;
   top: 0;
 }
@@ -37,6 +38,9 @@ header .nav-topbar {
   height: var(--nav-height);
   gap: 12px;
   box-sizing: border-box;
+
+  /* explicit bg so mobile flex-wrap expansion (search row) stays black, not #333 from gradient */
+  background: #000;
 }
 
 /* ── Hamburger ── */
@@ -254,13 +258,44 @@ header .nav-sections ul > li > ul > li {
   font-weight: 400;
 }
 
+/* ── Mobile: show search bar below logo row, center logo, hide My Account ── */
+@media (width < 900px) {
+  header .nav-topbar {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 10px 0;
+    gap: 0 12px;
+    align-content: center;
+  }
+
+  header .nav-hamburger { flex-shrink: 0; }
+
+  header .nav-brand {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+
+  header .nav-tools { margin-left: 0; }
+
+  header .nav-util-account { display: none; }
+
+  header .nav-search {
+    display: flex;
+    flex: 0 0 100%;
+    order: 1;
+    padding: 8px 0 4px;
+  }
+}
+
 /* ── Mobile expanded menu ── */
 @media (width < 900px) {
   header nav[aria-expanded='true'] .nav-sections {
     display: block;
     visibility: visible;
     position: fixed;
-    inset: var(--nav-height) 0 0 0;
+    inset: 0;
+    top: 110px; /* approx height of topbar + search row */
     background-color: #000;
     overflow-y: auto;
     z-index: 190;
@@ -328,6 +363,7 @@ header .nav-sections ul > li > ul > li {
     border-style: solid;
     border-color: currentcolor;
     vertical-align: middle;
+    transition: transform 0.2s ease, top 0.15s ease;
   }
 
   header .nav-sections .nav-drop[aria-expanded='true']::after {
@@ -385,6 +421,12 @@ header .nav-sections ul > li > ul > li {
     border-style: solid;
     border-color: #ccc;
     vertical-align: middle;
+    transition: transform 0.2s ease, top 0.15s ease;
+  }
+
+  header .nav-secondary-tools > li.nav-drop[aria-expanded='true']::after {
+    top: 2px;
+    transform: rotate(315deg);
   }
 
   /* Main nav list items */
@@ -454,5 +496,452 @@ header .nav-sections ul > li > ul > li {
 
   header .nav-sections .default-content-wrapper > ul > li:first-child.nav-drop::after {
     display: none;
+  }
+}
+
+/* ── Manufacturing megamenu panel (body-level, so position:fixed is viewport-relative) ── */
+.mfg-megamenu-panel {
+  display: none;
+  position: fixed;
+  left: var(--page-margin);
+  top: calc(var(--nav-height) + 44px);
+  width: 560px;
+  background: #fff;
+  box-shadow: 0 8px 32px rgb(0 0 0 / 20%);
+  border-radius: 0 0 8px 8px;
+  z-index: 195;
+  padding: 16px 20px 20px;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  list-style: none;
+  margin: 0;
+}
+
+@media (width >= 900px) {
+  .mfg-megamenu-panel.is-open {
+    display: grid;
+  }
+}
+
+/* Suppress the original dropdown on desktop (panel takes over) */
+@media (width >= 900px) {
+  header .nav-sections .default-content-wrapper > ul > li.nav-megamenu[aria-expanded='true'] > ul {
+    display: none;
+  }
+}
+
+/* Tagline */
+.mfg-megamenu-panel .megamenu-desc {
+  grid-column: 1 / -1;
+  font-size: 16px;
+  font-weight: 400;
+  color: #333;
+  padding: 0 0 8px;
+  list-style: none;
+}
+
+/* Tiles */
+.mfg-megamenu-panel .megamenu-tile {
+  padding: 0;
+  list-style: none;
+}
+
+.mfg-megamenu-panel .megamenu-tile > a:any-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 14px 20px;
+  border-radius: 8px;
+  color: #fff;
+  text-decoration: none;
+  gap: 4px;
+}
+
+.mfg-megamenu-panel .megamenu-tile > a:hover {
+  filter: brightness(1.08);
+  text-decoration: none;
+}
+
+.mfg-megamenu-panel .megamenu-tile.mfg-orange > a { background: #c14121; }
+.mfg-megamenu-panel .megamenu-tile.mfg-purple > a { background: #843887; }
+.mfg-megamenu-panel .megamenu-tile.mfg-pink   > a { background: #ae3f5c; }
+.mfg-megamenu-panel .megamenu-tile.mfg-teal   > a { background: #468180; }
+
+.tile-name {
+  display: block;
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: 0.06em;
+  color: #fff;
+}
+
+.tile-name strong {
+  font-size: 26px;
+  font-weight: 900;
+}
+
+.tile-brand {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: rgb(255 255 255 / 85%);
+}
+
+/* ── Nav item hover states ── */
+@media (width >= 900px) {
+  /* Shop, Learn: yellow text on hover (no background change) */
+  header .nav-sections .default-content-wrapper > ul > li:not(.nav-megamenu, .nav-company):hover,
+  header .nav-sections .default-content-wrapper > ul > li:not(.nav-megamenu, .nav-company):hover > p,
+  header .nav-sections .default-content-wrapper > ul > li:not(.nav-megamenu, .nav-company):hover > p a:any-link,
+  header .nav-sections .default-content-wrapper > ul > li:not(.nav-megamenu, .nav-company):hover > a:any-link {
+    color: var(--cta-color);
+  }
+
+  /* Manufacturing + Company: white bg, black text on hover and while open */
+  header .nav-sections .default-content-wrapper > ul > li.nav-megamenu:hover,
+  header .nav-sections .default-content-wrapper > ul > li.nav-megamenu[aria-expanded='true'],
+  header .nav-sections .default-content-wrapper > ul > li.nav-company:hover,
+  header .nav-sections .default-content-wrapper > ul > li.nav-company[aria-expanded='true'] {
+    background-color: #fff;
+    color: #000;
+  }
+
+  /* Explicitly override a:any-link white for the label text of these items.
+     Covers: <p>text</p>, <a>text</a>, and <p><a>text</a></p> structures. */
+  header .nav-sections .default-content-wrapper > ul > li.nav-megamenu:hover > p,
+  header .nav-sections .default-content-wrapper > ul > li.nav-megamenu:hover > p a:any-link,
+  header .nav-sections .default-content-wrapper > ul > li.nav-megamenu:hover > a:any-link,
+  header .nav-sections .default-content-wrapper > ul > li.nav-megamenu[aria-expanded='true'] > p,
+  header .nav-sections .default-content-wrapper > ul > li.nav-megamenu[aria-expanded='true'] > p a:any-link,
+  header .nav-sections .default-content-wrapper > ul > li.nav-megamenu[aria-expanded='true'] > a:any-link,
+  header .nav-sections .default-content-wrapper > ul > li.nav-company:hover > p,
+  header .nav-sections .default-content-wrapper > ul > li.nav-company:hover > p a:any-link,
+  header .nav-sections .default-content-wrapper > ul > li.nav-company:hover > a:any-link,
+  header .nav-sections .default-content-wrapper > ul > li.nav-company[aria-expanded='true'] > p,
+  header .nav-sections .default-content-wrapper > ul > li.nav-company[aria-expanded='true'] > p a:any-link,
+  header .nav-sections .default-content-wrapper > ul > li.nav-company[aria-expanded='true'] > a:any-link {
+    color: #000;
+  }
+
+  /* Company inline dropdown */
+  header .nav-sections .default-content-wrapper > ul > li.nav-company[aria-expanded='true'] > ul {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 100%;
+    width: 500px;
+    background: #fff;
+    box-shadow: 0 8px 32px rgb(0 0 0 / 20%);
+    border-radius: 0 0 8px 8px;
+    padding: 24px 32px 32px;
+    z-index: 195;
+    columns: 2;
+    column-gap: 40px;
+    column-rule: 1px solid #e0e0e0;
+    white-space: initial;
+  }
+
+  header .nav-sections .default-content-wrapper > ul > li.nav-company[aria-expanded='true'] > ul::before {
+    display: none;
+  }
+
+  header .nav-sections .default-content-wrapper > ul > li.nav-company[aria-expanded='true'] > ul > li {
+    padding: 12px 0;
+    break-inside: avoid;
+    font-weight: 300;
+  }
+
+  header .nav-sections .default-content-wrapper > ul > li.nav-company[aria-expanded='true'] > ul > li > a:any-link {
+    font-size: 18px;
+    font-weight: 300;
+    color: #000;
+    text-decoration: none;
+  }
+
+  header .nav-sections .default-content-wrapper > ul > li.nav-company[aria-expanded='true'] > ul > li > a:hover {
+    text-decoration: underline;
+  }
+}
+
+
+/* ── Utility bar (mobile strip below topbar) ── */
+header .nav-util-bar {
+  position: relative;
+  background: #2a2a2a;
+
+  /* escape nav's page-margin padding so bar is full viewport width */
+  margin: 0 calc(-1 * var(--page-margin));
+  padding: 0 var(--page-margin);
+}
+
+header .util-bar-list {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  height: 36px;
+}
+
+header .util-bar-item {
+  display: flex;
+  align-items: stretch;
+}
+
+header .util-bar-item > a:any-link {
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  color: #ccc;
+  font-size: 13px;
+  font-weight: 400;
+  text-decoration: none;
+  border-left: 1px solid #444;
+}
+
+header .util-bar-item > a:hover { color: #fff; }
+
+/* My Account — desktop only (mobile util bar always hides it) */
+header .util-bar-account { display: none; }
+
+header .util-bar-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 14px;
+  background: none;
+  border: none;
+  border-left: 1px solid #444;
+  color: #ccc;
+  font-size: 13px;
+  font-weight: 400;
+  cursor: pointer;
+  white-space: nowrap;
+  height: 100%;
+}
+
+header .util-bar-btn::after {
+  content: '';
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-right: 1.5px solid currentcolor;
+  border-bottom: 1.5px solid currentcolor;
+  transform: rotate(45deg) translateY(-2px);
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+header .util-bar-btn[aria-expanded='true'] {
+  background: #fff;
+  color: #111;
+  border-left-color: transparent;
+}
+
+header .util-bar-btn[aria-expanded='true']::after {
+  transform: rotate(225deg) translateY(2px);
+  border-color: #111;
+}
+
+header .util-bar-btn:hover:not([aria-expanded='true']) { color: #fff; }
+
+/* First visible item — no left border */
+header .util-bar-lang > .util-bar-btn { border-left: none; }
+
+/* ── Util dropdowns ── */
+.util-dropdown {
+  display: none;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  background: #fff;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 20%);
+  z-index: 250;
+  padding: 24px var(--page-margin) 32px;
+}
+
+.util-dropdown.is-open { display: block; }
+
+.util-dropdown-heading {
+  margin: 0 0 20px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #111;
+}
+
+/* Scoped under .util-dropdown so it beats `header .nav-sections ul { display: flex }`
+   (which would otherwise collapse the language/currency items onto one row). */
+header .util-dropdown .util-dropdown-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 20px;
+}
+
+.util-dropdown-grid li a:any-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 0;
+  font-size: 18px;
+  font-weight: 400;
+  color: #111;
+  text-decoration: none;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.util-dropdown-grid li a.util-dropdown-current {
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+.util-dropdown-grid li a:hover { text-decoration: underline; }
+
+.util-flag {
+  font-size: 22px;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.util-currency-note {
+  margin: 24px 0 0;
+  font-size: 15px;
+  color: #555;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.util-currency-note a:any-link {
+  color: var(--link-color);
+  text-decoration: underline;
+}
+
+/* Desktop: util-bar hidden; secondary-tools in nav-sections handles it */
+@media (width >= 900px) {
+  header .nav-util-bar { display: none; }
+  header .util-bar-account { display: flex; }
+}
+
+/* ── Shop drawer ── */
+.shop-drawer-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgb(0 0 0 / 45%);
+  z-index: 299;
+}
+
+.shop-drawer-overlay.is-open { display: block; }
+
+.shop-drawer-panel {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: min(540px, 90vw);
+  height: 100vh;
+  background: #fff;
+  box-shadow: 4px 0 24px rgb(0 0 0 / 30%);
+  z-index: 300;
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+  overflow: hidden;
+}
+
+.shop-drawer-panel.is-open { transform: translateX(0); }
+
+.shop-drawer-close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  background: #f0f0f0;
+  color: #333;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 22px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.shop-drawer-list {
+  flex: 1;
+  overflow-y: auto;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.shop-drawer-section-header {
+  background: #f4f4f4;
+  padding: 14px 20px;
+  font-size: 18px;
+  font-weight: 700;
+  color: #111;
+  border-bottom: 1px solid #e5e5e5;
+  text-align: center;
+}
+
+@media (width >= 900px) {
+  .shop-drawer-section-header { text-align: left; }
+}
+
+.shop-drawer-item {
+  border-bottom: 1px solid #efefef;
+}
+
+.shop-drawer-item > a:any-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px 20px;
+  font-size: 16px;
+  font-weight: 400;
+  color: #111;
+  text-decoration: none;
+}
+
+.shop-drawer-item > a:any-link::after {
+  content: '\203A';
+  font-size: 22px;
+  color: #aaa;
+  flex-shrink: 0;
+  margin-left: 12px;
+}
+
+.shop-drawer-item > a:hover {
+  background: #f8f8f8;
+  text-decoration: none;
+}
+
+/* Suppress shopItem's original inline dropdown */
+@media (width >= 900px) {
+  header .nav-sections .default-content-wrapper > ul > li.nav-shop[aria-expanded='true'] > ul {
+    display: none;
+  }
+}
+
+/* ── Secondary-tools language/currency dropdown panels ── */
+@media (width >= 900px) {
+  /* Override full-width util-dropdown when inside a secondary-tools li */
+  header .nav-secondary-tools > li > .util-dropdown {
+    left: auto;
+    right: 0;
+    width: 440px;
   }
 }
