@@ -9,13 +9,21 @@ export default function decorate(block) {
     const badgePic = pictures[1];
     const isTopSeller = /top\s*seller/i.test(mediaCell?.textContent || '');
 
-    // Title (h3) carries the product link; subtitle is the following <p>.
-    const titleEl = textCell?.querySelector('h3, h2, h4');
+    // Title carries the product link; subtitle is the following <p>.
+    let titleEl = textCell?.querySelector('h3, h2, h4');
     const href = titleEl?.querySelector('a')?.getAttribute('href');
     const subEl = textCell?.querySelector('p');
 
     // Title: drop the redundant <strong> wrapper, keep the link + any sub/sup.
     if (titleEl) {
+      // Promote to h2 so it follows the section's h1 without a skipped level.
+      if (titleEl.tagName !== 'H2') {
+        const h2 = document.createElement('h2');
+        if (titleEl.id) h2.id = titleEl.id;
+        h2.append(...titleEl.childNodes);
+        titleEl.replaceWith(h2);
+        titleEl = h2;
+      }
       titleEl.classList.add('fp-card-title');
       const strong = titleEl.querySelector('strong');
       if (strong) strong.replaceWith(...strong.childNodes);

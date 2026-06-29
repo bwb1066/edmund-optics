@@ -25,6 +25,19 @@ export default function decorate(block) {
     h3s[h3s.length - 1].after(p);
   }
 
+  // Promote subheadings h3 -> h2: they sit directly under the hero's h1, so an
+  // h3 here skips a level (a11y: heading-order). Drop any now-empty heading.
+  h3s.forEach((h3) => {
+    if (!h3.textContent.trim()) {
+      h3.remove();
+      return;
+    }
+    const h2 = document.createElement('h2');
+    if (h3.id) h2.id = h3.id;
+    h2.append(...h3.childNodes);
+    h3.replaceWith(h2);
+  });
+
   // Mark the containing section so all three heroes lay out as a grid
   block.closest('.section')?.classList.add('hero-grid');
 }

@@ -104,6 +104,22 @@ function decorateLegalSection(section) {
   wrapper.append(left, right);
 }
 
+// Certs are authored as a <picture> followed by an empty <a> (the intended
+// link). Pull each picture into its link so the badge is clickable and the
+// link has an accessible name (a11y: link-name).
+function decorateCertsSection(section) {
+  section.classList.add('footer-certs');
+  section.querySelectorAll('a').forEach((a) => {
+    if (a.children.length || a.textContent.trim()) return;
+    const pic = a.previousElementSibling;
+    if (pic && pic.tagName === 'PICTURE') {
+      a.prepend(pic);
+      const alt = pic.querySelector('img')?.alt.trim();
+      if (alt) a.setAttribute('aria-label', alt);
+    }
+  });
+}
+
 export default async function decorate(block) {
   const footerMeta = getMetadata('footer');
   const footerPath = footerMeta ? new URL(footerMeta, window.location).pathname : '/footer';
@@ -118,7 +134,7 @@ export default async function decorate(block) {
   if (sections[0]) sections[0].classList.add('footer-signup');
   if (sections[1]) decorateNavSection(sections[1]);
   if (sections[2]) decorateLegalSection(sections[2]);
-  if (sections[3]) sections[3].classList.add('footer-certs');
+  if (sections[3]) decorateCertsSection(sections[3]);
 
   block.append(footer);
 }

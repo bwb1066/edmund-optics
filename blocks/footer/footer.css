@@ -173,6 +173,11 @@ footer .footer-legal-left p:first-child {
 footer .footer-legal-left a {
   color: #aaa;
   text-decoration: none;
+
+  /* Give the small legal links a >=24px tap target (a11y: target-size) */
+  display: inline-block;
+  padding: 4px 2px;
+  line-height: 1.4;
 }
 
 /* Social icons */

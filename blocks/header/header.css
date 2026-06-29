@@ -1,6 +1,16 @@
-/* Override the default header height so both nav rows are accounted for */
+/* Override the default header height so both nav rows are accounted for.
+   Reserve the final rendered height up front so the lazily-loaded nav does not
+   push page content down (avoids cumulative layout shift). min-height is a floor;
+   height stays auto so the bar can grow on very narrow viewports. */
 header {
   height: auto;
+  min-height: 144px; /* mobile: topbar (logo + search row) + util bar */
+}
+
+@media (width >= 900px) {
+  header {
+    min-height: 109px; /* desktop: topbar (64) + sections bar (45) */
+  }
 }
 
 /* ── Wrapper ── */

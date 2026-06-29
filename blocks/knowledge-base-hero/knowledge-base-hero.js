@@ -92,6 +92,8 @@ export default function decorate(block) {
       const media = document.createElement(href ? 'a' : 'div');
       media.className = 'kb-card-media';
       if (href) media.href = href;
+      // Image-only link needs an accessible name (a11y: link-name).
+      if (href) media.setAttribute('aria-label', titleEl?.textContent.trim() || 'Read more');
       media.append(cellPic);
       card.append(media);
 
@@ -106,7 +108,8 @@ export default function decorate(block) {
       }
 
       if (titleEl) {
-        const h = document.createElement('h3');
+        // h2 (not h3): card titles follow the hero's h1 — avoids a skipped level.
+        const h = document.createElement('h2');
         h.className = 'kb-card-title';
         const a = titleEl.querySelector('a');
         if (a) {
