@@ -10,6 +10,19 @@
  * governing permissions and limitations under the License.
  */
 
+/* Metrics-adjusted fallback for sofia-pro (Adobe Fonts loads with
+   font-display:auto). Tuned via capsize so the fallback occupies the same space
+   as sofia-pro — text does not reflow when the web font swaps in (avoids CLS).
+   Lives here (render-blocking) rather than fonts.css so it exists at first paint. */
+@font-face {
+  font-family: sofia-pro-fallback;
+  src: local('Arial');
+  size-adjust: 102.51%;
+  ascent-override: 105.35%;
+  descent-override: 26.34%;
+  line-gap-override: 0%;
+}
+
 :root {
   /* colors */
   --background-color: white;
@@ -22,8 +35,8 @@
   --cta-color-hover: #e6b900;
 
   /* fonts */
-  --body-font-family: sofia-pro, sans-serif;
-  --heading-font-family: sofia-pro, sans-serif;
+  --body-font-family: sofia-pro, sofia-pro-fallback, sans-serif;
+  --heading-font-family: sofia-pro, sofia-pro-fallback, sans-serif;
   --font-weight-light: 300;
   --font-weight-regular: 400;
   --font-weight-bold: 700;

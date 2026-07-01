@@ -51,7 +51,7 @@ main > .section:has(.contact-columns) + .section {
   align-items: center;
   justify-content: center;
   gap: 9px;
-  font-family: sofia-pro, Helvetica, Arial, sans-serif;
+  font-family: sofia-pro, sofia-pro-fallback, Helvetica, Arial, sans-serif;
   font-size: clamp(20px, 2vw, 26px);
   font-weight: 800;
   line-height: 1.1;

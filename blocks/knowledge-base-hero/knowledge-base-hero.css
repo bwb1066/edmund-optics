@@ -32,7 +32,7 @@ main > .section:has(.knowledge-base-hero) {
 
 .knowledge-base-hero .kb-title {
   margin: 0;
-  font-family: sofia-pro, Helvetica, Arial, sans-serif;
+  font-family: sofia-pro, sofia-pro-fallback, Helvetica, Arial, sans-serif;
   font-weight: 700;
   font-size: clamp(44px, 7vw, 72px);
   line-height: 0.94;
