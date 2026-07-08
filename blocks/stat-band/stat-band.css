@@ -1,0 +1,46 @@
+/* A flat, typography-only band — deliberately the one section on the page
+   with no image and no rounded card, so the numbers themselves carry the
+   visual weight (per PRODUCT.md's "show, don't tell" principle). */
+main > .section:has(.stat-band) {
+  background: #131313;
+}
+
+.stat-band {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 32px 20px;
+  padding: 48px 0;
+}
+
+.stat-band-item {
+  text-align: center;
+}
+
+.stat-band-number {
+  font-size: clamp(32px, 6vw, 48px);
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.1;
+}
+
+.stat-band-number p {
+  margin: 0;
+}
+
+.stat-band-label {
+  margin-top: 6px;
+  font-size: 14px;
+  color: #bbb;
+  line-height: 1.4;
+}
+
+.stat-band-label p {
+  margin: 0;
+}
+
+@media (width >= 600px) {
+  .stat-band {
+    grid-template-columns: repeat(4, 1fr);
+    padding: 64px 0;
+  }
+}

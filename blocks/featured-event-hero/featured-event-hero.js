@@ -24,6 +24,10 @@ export default function decorate(block) {
   const subHeading = allHeadings.find((h) => /^H[3-6]$/.test(h.tagName));
   const labelText = (labelLink?.textContent || subHeading?.textContent || 'FEATURED EVENT').trim();
 
+  // Optional body copy: any <p> that isn't just the label or CTA link wrapper.
+  const descriptionEls = [...block.querySelectorAll('p')]
+    .filter((p) => !(labelLink && p.contains(labelLink)) && !(ctaLink && p.contains(ctaLink)));
+
   const content = document.createElement('div');
   content.className = 'featured-event-hero-content';
 
@@ -33,6 +37,11 @@ export default function decorate(block) {
   content.append(label);
 
   if (headlineEl) content.append(headlineEl);
+
+  descriptionEls.forEach((p) => {
+    p.classList.add('featured-event-description');
+    content.append(p);
+  });
 
   if (ctaLink) {
     // If the CTA still reads as an ALL-CAPS eyebrow, normalize it.

@@ -25,6 +25,26 @@ export default function decorate(block) {
 
   if (heading) content.append(heading);
 
+  // Optional body copy + CTA (the simple heading-only tile just won't have
+  // these): any <p> that isn't a picture wrapper, and any <a> outside the
+  // heading (the last such link is the CTA; earlier <p>s are description).
+  const outerLinks = [...block.querySelectorAll('a')].filter((a) => !heading?.contains(a));
+  const ctaLink = outerLinks[outerLinks.length - 1] ?? null;
+  const descriptionEls = [...block.querySelectorAll('p')]
+    .filter((p) => !p.querySelector('picture') && !(ctaLink && p.contains(ctaLink)));
+
+  descriptionEls.forEach((p) => {
+    p.classList.add('secondary-hero-description');
+    content.append(p);
+  });
+
+  if (ctaLink) {
+    const p = document.createElement('p');
+    p.className = 'secondary-hero-cta';
+    p.append(ctaLink);
+    content.append(p);
+  }
+
   if (allPictures[2]) {
     const logoWrap = document.createElement('div');
     logoWrap.className = 'secondary-hero-logo';

@@ -31,7 +31,8 @@
   box-sizing: border-box;
 }
 
-.tertiary-hero h1 {
+.tertiary-hero h1,
+.tertiary-hero h2 {
   font-size: 28px;
   font-weight: 800;
   color: #fff;
@@ -42,17 +43,26 @@
   text-shadow: 0 2px 12px rgb(0 0 0 / 50%);
 }
 
-.tertiary-hero h1 a:any-link {
+.tertiary-hero h1 a:any-link,
+.tertiary-hero h2 a:any-link {
   color: #fff;
   text-decoration: none;
 }
 
-.tertiary-hero h1 a:hover {
+.tertiary-hero h1 a:hover,
+.tertiary-hero h2 a:hover {
   text-decoration: underline;
 }
 
 @media (width >= 900px) {
+  /* Standalone floor (this block used outside the hero-grid). height:100%
+     below only applies inside .hero-grid, where the grid row gives it a
+     definite height instead. */
   .tertiary-hero {
+    min-height: 200px;
+  }
+
+  main > .section.hero-grid .tertiary-hero {
     height: 100%;
     min-height: 0;
   }
@@ -61,7 +71,8 @@
     padding: 28px 32px;
   }
 
-  .tertiary-hero h1 {
+  .tertiary-hero h1,
+  .tertiary-hero h2 {
     font-size: 32px;
   }
 }
