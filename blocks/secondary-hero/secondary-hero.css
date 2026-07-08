@@ -18,6 +18,23 @@
   object-fit: cover;
 }
 
+/* Even scrim for text legibility over whatever background image is
+   authored — load-bearing now that this block can carry body copy
+   (lighter weight, no text-shadow) and not just a heavy-shadowed
+   uppercase heading. */
+.secondary-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+
+  /* Must outrank .secondary-hero-bg's z-index: 0 explicitly — ::before is
+     the conceptual first child (painted first/behind) regardless of where
+     the JS-prepended <picture> lands in the real DOM, so equal z-index
+     would put this scrim underneath the image, not over it. */
+  z-index: 1;
+  background: rgb(0 0 0 / 35%);
+}
+
 /* .secondary-hero-content is a direct child of .secondary-hero (JS removes
    the EDS wrapper divs after decoration) so inset:0 fills the card exactly. */
 .secondary-hero-content {
@@ -43,7 +60,8 @@
   width: auto;
 }
 
-.secondary-hero h1 {
+.secondary-hero h1,
+.secondary-hero h2 {
   font-size: clamp(26px, 4vw, 38px);
   font-weight: 800;
   color: #fff;
@@ -54,13 +72,52 @@
   text-shadow: 0 2px 12px rgb(0 0 0 / 50%);
 }
 
-.secondary-hero h1 a:any-link {
+.secondary-hero h1 a:any-link,
+.secondary-hero h2 a:any-link {
   color: #fff;
   text-decoration: none;
 }
 
-.secondary-hero h1 a:hover {
+.secondary-hero h1 a:hover,
+.secondary-hero h2 a:hover {
   text-decoration: underline;
+}
+
+/* Optional body copy + CTA (only present when this block is used as a
+   standalone statement rather than the simple heading-only grid tile) */
+.secondary-hero-description {
+  margin: 8px 0 0;
+  max-width: 60ch;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #fff;
+  opacity: 0.9;
+  text-transform: none;
+  letter-spacing: normal;
+  text-shadow: none;
+}
+
+.secondary-hero-cta {
+  margin: 14px 0 0;
+}
+
+.secondary-hero-cta a:any-link {
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--cta-color);
+  color: #111;
+  font-weight: 700;
+  font-size: 16px;
+  padding: 14px 28px;
+  border-radius: 50px;
+  text-decoration: none;
+  text-transform: none;
+  letter-spacing: normal;
+  transition: background-color 0.15s;
+}
+
+.secondary-hero-cta a:hover {
+  background-color: var(--cta-color-hover);
 }
 
 .secondary-hero-logo {
@@ -73,7 +130,14 @@
 }
 
 @media (width >= 900px) {
+  /* Standalone floor (this block used outside the hero-grid, e.g. as a
+     full-width closing statement). height:100% below only applies inside
+     .hero-grid, where the grid row gives it a definite height instead. */
   .secondary-hero {
+    min-height: 320px;
+  }
+
+  main > .section.hero-grid .secondary-hero {
     height: 100%;
     min-height: 0;
   }
@@ -82,7 +146,8 @@
     padding: 28px 32px;
   }
 
-  .secondary-hero h1 {
+  .secondary-hero h1,
+  .secondary-hero h2 {
     font-size: clamp(28px, 3.5vw, 40px);
   }
 }

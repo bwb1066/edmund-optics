@@ -72,6 +72,15 @@
   text-decoration: none;
 }
 
+/* Optional body copy (date/location/description) */
+.featured-event-description {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.5;
+  color: #fff;
+  opacity: 0.9;
+}
+
 /* CTA button */
 .featured-event-cta {
   margin: 4px 0 0;

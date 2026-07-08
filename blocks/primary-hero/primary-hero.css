@@ -176,4 +176,11 @@
   main > .section.hero-grid > .featured-event-hero-wrapper {
     grid-column: 1 / 3;
   }
+
+  /* A primary-hero used on its own (no secondary/tertiary siblings) still
+     gets .hero-grid from primary-hero.js; without this it's stranded in the
+     3fr column, leaving the 2fr track blank. Span both when it's the only hero. */
+  main > .section.hero-grid > .primary-hero-wrapper:only-child {
+    grid-column: 1 / 3;
+  }
 }
