@@ -332,3 +332,34 @@ concerns; if so, consider a fresh critique pass given how much changed
 structurally since the last one.
 
 ---
+
+## 2026-07-09T00:00:00-07:00 — Built eo-concept-1a (Cinematic Carousel homepage) + scoped concept-1a header theme
+
+**Prompt:** Resume Project Prism session 3. Build a third exploration from a
+supplied design reference (export-1a "Cinematic Carousel"), rendered in EO's
+own tokens, using the real nav/header/footer and real EO content, more
+JS-interactive. Then reskin the header to the 1A look and give the mega-menu a
+modern treatment — without clobbering the existing AEM header JS/components,
+using the DA nav content.
+
+**Decisions:**
+- Page: `drafts/eo-concept-1a` — full-bleed rotating hero (reused
+  `hero-carousel`), "Shop by Category" grid (new `category-grid` block,
+  color-at-rest → greyscale-on-hover tiles, real `/c/` links), split banner
+  (new `split-banner` block). Real supplied photography, optimized.
+- Header restyle done as a **page-scoped CSS theme** (`theme: concept-1a`
+  metadata → `body.concept-1a`), appended to `header.css`. `header.js` and the
+  DA `/nav` content are untouched; the production header on every other page is
+  unaffected. Bar → translucent-white sticky, dark logo swap, dark links/blue
+  hover, yellow Cart pill, utility clutter hidden.
+- Manufacturing mega-menu → editorial split (link list + featured visual),
+  replacing the four arbitrary-colored tiles. Company dropdown + Shop drawer
+  restyled to match.
+- Committed directly to `main` per session-3 rule. Rollback tags:
+  `pre-prism-1a-20260709` (before) and `prism-1a-20260709` (this build).
+
+**Files:**
+- `drafts/eo-concept-1a.plain.html` — created (incl. theme metadata block)
+- `blocks/category-grid/*`, `blocks/split-banner/*` — created
+- `blocks/header/header.css` — appended scoped concept-1a theme sections
+- `drafts/images/eo-concept-1a/*` — added (optimized photography + cropped logo)

@@ -1,0 +1,91 @@
+/* Edge-to-edge, matching the hero-carousel's full-bleed treatment: cancel the
+   section margin and page inset so the banner reaches the viewport edges. */
+main > .section:has(.split-banner) {
+  margin: 0;
+}
+
+main > .section:has(.split-banner) > div {
+  padding: 0;
+  max-width: none;
+}
+
+.split-banner {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.split-banner .split-banner-panel {
+  position: relative;
+  overflow: hidden;
+  height: 340px;
+  color: #fff;
+  text-decoration: none;
+  display: block;
+}
+
+.split-banner .split-banner-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  line-height: 0;
+}
+
+.split-banner .split-banner-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.split-banner .split-banner-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(0deg, rgb(0 0 0 / 70%), transparent 60%);
+  pointer-events: none;
+}
+
+.split-banner .split-banner-caption {
+  position: absolute;
+  z-index: 2;
+  left: 36px;
+  bottom: 32px;
+  right: 36px;
+  font-weight: 600;
+  font-size: clamp(26px, 3vw, 34px);
+  line-height: 1.1;
+}
+
+.split-banner .split-banner-caption p {
+  margin: 0;
+}
+
+.split-banner .split-banner-caption .accent {
+  color: var(--cta-color, #ffcd00);
+}
+
+@media (hover: hover) {
+  .split-banner a.split-banner-panel:hover .split-banner-bg img {
+    transform: scale(1.03);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .split-banner .split-banner-bg img {
+    transition: none;
+  }
+
+  .split-banner a.split-banner-panel:hover .split-banner-bg img {
+    transform: none;
+  }
+}
+
+@media (width >= 900px) {
+  .split-banner {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .split-banner .split-banner-panel {
+    height: 480px;
+  }
+}

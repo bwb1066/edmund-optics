@@ -955,3 +955,266 @@ header .util-dropdown .util-dropdown-grid {
     width: 440px;
   }
 }
+
+/* ============================================================
+   Concept 1A theme — editorial-split Manufacturing mega-menu.
+   Scoped to body.concept-1a, so the production header on every other
+   page is untouched. CSS-only: header.js still builds the panel from the
+   DA nav content (tagline + four capability links); this only restyles it
+   into a full-width editorial layout (link list at left, featured visual
+   at right). Desktop only — mobile keeps the stock inline dropdown.
+   ============================================================ */
+@media (width >= 900px) {
+  body.concept-1a .mfg-megamenu-panel {
+    left: 0;
+    right: 0;
+    width: auto;
+    max-width: none;
+    padding: 44px var(--page-margin) 52px;
+    padding-right: 52%;
+    border-radius: 0 0 16px 16px;
+    box-shadow: 0 12px 32px rgb(0 0 0 / 12%);
+  }
+
+  /* Featured visual — right half, drawn as a pseudo-element so no DOM/JS
+     change is needed; sourced from concept-1a photography. */
+  body.concept-1a .mfg-megamenu-panel::before {
+    content: "";
+    position: absolute;
+    top: 44px;
+    bottom: 52px;
+    right: var(--page-margin);
+    width: 44%;
+    background:
+      linear-gradient(0deg, rgb(0 0 0 / 55%), rgb(0 0 0 / 0%) 55%),
+      url("/drafts/images/eo-concept-1a/hero-array.jpg") center / cover no-repeat;
+    border-radius: 12px;
+  }
+
+  body.concept-1a .mfg-megamenu-panel::after {
+    content: "Custom & volume optical manufacturing, engineered by Edmund.";
+    position: absolute;
+    right: calc(var(--page-margin) + 24px);
+    bottom: 76px;
+    width: calc(44% - 48px);
+    color: #fff;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  /* Gate display on .is-open only — the scoped selector outspecifies the
+     base `display: none`, so without this the panel would show when closed. */
+  body.concept-1a .mfg-megamenu-panel.is-open {
+    display: block;
+  }
+
+  /* Tagline → intro lede, kept to the left column so it never runs under
+     the featured visual */
+  body.concept-1a .mfg-megamenu-panel .megamenu-desc {
+    max-width: 380px;
+    margin: 0 0 18px;
+    padding: 0;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.4;
+    color: var(--dark-color, #505050);
+  }
+
+  /* Colored tiles → clean editorial list rows, constrained so the arrow
+     hugs the label instead of floating to the far edge */
+  body.concept-1a .mfg-megamenu-panel .megamenu-tile {
+    max-width: 380px;
+    border-top: 1px solid #ececec;
+  }
+
+  body.concept-1a .mfg-megamenu-panel .megamenu-tile > a:any-link {
+    position: relative;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 2px;
+    padding: 16px 40px 16px 0;
+    text-align: left;
+    background: none;
+    border-radius: 0;
+    color: var(--text-color, #131313);
+  }
+
+  body.concept-1a .mfg-megamenu-panel .megamenu-tile > a:hover {
+    background: none;
+    filter: none;
+  }
+
+  body.concept-1a .mfg-megamenu-panel .megamenu-tile > a::after {
+    content: "→";
+    position: absolute;
+    top: 50%;
+    right: 6px;
+    transform: translateY(-50%);
+    color: var(--dark-color, #505050);
+    font-size: 20px;
+    transition: transform 0.15s ease, color 0.15s ease;
+  }
+
+  body.concept-1a .mfg-megamenu-panel .megamenu-tile > a:hover::after {
+    color: var(--link-color, #3b63fb);
+    transform: translateY(-50%) translateX(5px);
+  }
+
+  body.concept-1a .mfg-megamenu-panel .tile-name {
+    color: var(--text-color, #131313);
+    font-size: 18px;
+    letter-spacing: 0.02em;
+  }
+
+  body.concept-1a .mfg-megamenu-panel .tile-name strong {
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  body.concept-1a .mfg-megamenu-panel .tile-brand {
+    color: var(--dark-color, #505050);
+    font-size: 12px;
+  }
+
+  body.concept-1a .mfg-megamenu-panel .megamenu-tile > a:hover .tile-name,
+  body.concept-1a .mfg-megamenu-panel .megamenu-tile > a:hover .tile-name strong {
+    color: var(--link-color, #3b63fb);
+  }
+}
+
+/* ============================================================
+   Concept 1A theme — base bar reskin (translucent-white sticky) +
+   editorial Company dropdown & Shop drawer. Scoped to body.concept-1a;
+   CSS-only; header.js and the DA nav content are untouched.
+   ============================================================ */
+
+/* Bar surface: replace the black→charcoal gradient with translucent white */
+body.concept-1a header .nav-wrapper {
+  background: rgb(255 255 255 / 92%);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid #ececec;
+}
+
+body.concept-1a header nav,
+body.concept-1a header nav a:any-link {
+  color: var(--text-color, #131313);
+}
+
+body.concept-1a header .nav-topbar {
+  background: transparent;
+}
+
+/* Swap the white-text logo for the dark-on-light wordmark */
+body.concept-1a header .nav-brand img {
+  display: none;
+}
+
+/* Brand is a bare <picture> (no <a> wrapper), so swap the logo on it.
+   Box aspect matches the cropped logo (470x108 ≈ 4.35:1) so it fills fully. */
+body.concept-1a header .nav-brand picture {
+  display: inline-block;
+  width: 200px;
+  height: 46px;
+  overflow: hidden;
+  background: url("/drafts/images/eo-concept-1a/eo-logo-full.png") left center / contain no-repeat;
+}
+
+/* Search field legible on a white bar */
+body.concept-1a header .nav-search-form {
+  background: #f3f3f3;
+  border: 1px solid #e3e3e3;
+}
+
+body.concept-1a header .nav-search-form input,
+body.concept-1a header .nav-search-form svg {
+  color: var(--text-color, #131313);
+}
+
+/* Cart → yellow pill (the one action accent); account stays dark text */
+body.concept-1a header .nav-util-links li:has(.nav-cart-count) > a {
+  padding: 8px 16px;
+  border-radius: 50px;
+  background: var(--cta-color, #ffcd00);
+  color: #131313;
+  font-weight: 700;
+}
+
+/* Strip utility clutter for the minimal 1A bar */
+body.concept-1a header .nav-secondary-tools,
+body.concept-1a header .nav-util-bar {
+  display: none;
+}
+
+@media (width >= 900px) {
+  /* Section links: dark at rest, blue on hover/open, no charcoal fill */
+  body.concept-1a header .nav-sections .default-content-wrapper > ul > li,
+  body.concept-1a header .nav-sections .default-content-wrapper > ul > li > a:any-link,
+  body.concept-1a header .nav-sections .default-content-wrapper > ul > li > p {
+    background: transparent;
+    color: var(--text-color, #131313);
+  }
+
+  body.concept-1a header .nav-sections .default-content-wrapper > ul > li:hover,
+  body.concept-1a header .nav-sections .default-content-wrapper > ul > li:hover > a:any-link,
+  body.concept-1a header .nav-sections .default-content-wrapper > ul > li:hover > p,
+  body.concept-1a header .nav-sections .default-content-wrapper > ul > li[aria-expanded='true'],
+  body.concept-1a header .nav-sections .default-content-wrapper > ul > li[aria-expanded='true'] > a:any-link,
+  body.concept-1a header .nav-sections .default-content-wrapper > ul > li[aria-expanded='true'] > p {
+    background: transparent;
+    color: var(--link-color, #3b63fb);
+  }
+
+  /* Drop the button-style block behind the first (Shop) item */
+  body.concept-1a header .nav-sections .default-content-wrapper > ul > li:first-child::before {
+    display: none;
+  }
+
+  /* Company dropdown → editorial: cleaner rows, blue hover, soft radius */
+  body.concept-1a header .nav-sections .default-content-wrapper > ul > li.nav-company[aria-expanded='true'] > ul {
+    width: 460px;
+    padding: 16px;
+    border-radius: 0 0 12px 12px;
+    column-gap: 24px;
+    column-rule: none;
+  }
+
+  body.concept-1a header .nav-sections .default-content-wrapper > ul > li.nav-company[aria-expanded='true'] > ul > li {
+    padding: 0;
+  }
+
+  body.concept-1a header .nav-sections .default-content-wrapper > ul > li.nav-company[aria-expanded='true'] > ul > li > a:any-link {
+    display: block;
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-size: 15px;
+    color: var(--text-color, #131313);
+  }
+
+  body.concept-1a header .nav-sections .default-content-wrapper > ul > li.nav-company[aria-expanded='true'] > ul > li > a:hover {
+    background: var(--light-color, #f8f8f8);
+    color: var(--link-color, #3b63fb);
+    text-decoration: none;
+  }
+}
+
+/* Shop drawer → editorial polish to match the mega-menu */
+body.concept-1a .shop-drawer-section-header {
+  background: #fff;
+  border-bottom: 1px solid #ececec;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--dark-color, #505050);
+}
+
+body.concept-1a .shop-drawer-item > a:hover {
+  background: var(--light-color, #f8f8f8);
+  color: var(--link-color, #3b63fb);
+}
+
+body.concept-1a .shop-drawer-item > a:hover::after {
+  color: var(--link-color, #3b63fb);
+}

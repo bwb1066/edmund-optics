@@ -1,0 +1,76 @@
+.category-grid .category-grid-items {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.category-grid .category-grid-card {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.category-grid .category-grid-img {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: var(--rounded-sm, 3px);
+  background: var(--nav-black, #000);
+  line-height: 0;
+}
+
+.category-grid .category-grid-img picture,
+.category-grid .category-grid-img img {
+  width: 100%;
+  height: 100%;
+}
+
+.category-grid .category-grid-img img {
+  object-fit: cover;
+
+  /* Concept 1A signature: catalog imagery reads in full color at rest and
+     desaturates to the instrument-panel greyscale on hover. */
+  filter: grayscale(0);
+  transition: filter 0.6s ease, transform 0.6s ease;
+}
+
+.category-grid .category-grid-name {
+  margin-top: 10px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text-color, #131313);
+}
+
+@media (hover: hover) {
+  .category-grid a.category-grid-card:hover .category-grid-img img {
+    filter: grayscale(1);
+    transform: scale(1.04);
+  }
+
+  .category-grid a.category-grid-card:hover .category-grid-name {
+    color: var(--link-color, #3b63fb);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .category-grid .category-grid-img img {
+    transition: none;
+  }
+
+  .category-grid a.category-grid-card:hover .category-grid-img img {
+    transform: none;
+  }
+}
+
+@media (width >= 600px) {
+  .category-grid .category-grid-items {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (width >= 900px) {
+  .category-grid .category-grid-items {
+    grid-template-columns: repeat(6, 1fr);
+    gap: 18px;
+  }
+}
