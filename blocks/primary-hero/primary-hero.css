@@ -20,22 +20,29 @@
 
 /* Graceful fallback for contexts that don't run block decoration JS — notably
    the DA Layout tab, or if primary-hero.js ever fails to load. There the raw
-   <picture> is never promoted to .primary-hero-bg and stays in normal flow
-   nested alongside the copy, so at intrinsic size it overflows/duplicates.
-   Keep it IN FLOW but cap its height (don't absolutely-position it — doing so
-   paints it over the static copy in that context and hides the text). This
-   yields a clean image-above-text stack with no overflow. Scoped with
-   :not(.primary-hero-bg) so the real JS-decorated render is unaffected. */
-.primary-hero picture:not(.primary-hero-bg) {
+   <picture> is never promoted to .primary-hero-bg, so the block can't work as
+   a fixed-height overlay (absolute backdrop covers the copy; in-flow image
+   pushes the copy past the fixed height and clips it). Detect that state via
+   :has() and let the block grow into a simple image-above-text stack: no
+   overflow, no covered text, no clipping. `!important` overrides the hero-grid
+   height rules below. The real JS render always has .primary-hero-bg, so none
+   of this applies there. */
+.primary-hero:not(:has(.primary-hero-bg)) {
+  height: auto !important;
+  min-height: 0 !important;
+  overflow: visible !important;
+}
+
+.primary-hero:not(:has(.primary-hero-bg)) picture {
   display: block;
-  max-height: 320px;
+  max-height: 300px;
   overflow: hidden;
   line-height: 0;
 }
 
-.primary-hero picture:not(.primary-hero-bg) img {
+.primary-hero:not(:has(.primary-hero-bg)) picture img {
   width: 100%;
-  max-height: 320px;
+  max-height: 300px;
   object-fit: cover;
 }
 
