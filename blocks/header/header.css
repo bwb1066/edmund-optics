@@ -1090,6 +1090,11 @@ header .util-dropdown .util-dropdown-grid {
    CSS-only; header.js and the DA nav content are untouched.
    ============================================================ */
 
+/* Base-bar reskin — DESKTOP ONLY. On mobile the header is a different
+   structure (hamburger + slide-in drawer); the white surface made the white
+   hamburger icon and drawer chrome invisible, so mobile keeps the standard
+   EO dark header untouched. */
+@media (width >= 900px) {
 /* Bar surface: replace the black→charcoal gradient with translucent white */
 body.concept-1a header .nav-wrapper {
   background: rgb(255 255 255 / 92%);
@@ -1145,6 +1150,7 @@ body.concept-1a header .nav-util-links li:has(.nav-cart-count) > a {
 body.concept-1a header .nav-secondary-tools,
 body.concept-1a header .nav-util-bar {
   display: none;
+}
 }
 
 @media (width >= 900px) {
@@ -1217,4 +1223,90 @@ body.concept-1a .shop-drawer-item > a:hover {
 
 body.concept-1a .shop-drawer-item > a:hover::after {
   color: var(--link-color, #3b63fb);
+}
+
+/* ============================================================
+   Concept 1A — progressive (accordion) mobile nav.
+   Pairs with concept-1a-nav.js. Collapses the multi-level tree so it
+   reveals one level at a time on tap, with a staggered open. Mobile +
+   body.concept-1a only.
+   ============================================================ */
+@media (width < 900px) {
+  /* Collapse every submenu; reveal only the tapped-open branch */
+  body.concept-1a #nav .nav-sections li > ul {
+    display: none;
+  }
+
+  body.concept-1a #nav .nav-sections li[data-c1a-open] > ul {
+    display: block;
+  }
+
+  /* Rows */
+  body.concept-1a #nav .nav-sections li > a,
+  body.concept-1a #nav .nav-sections li > p {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0;
+    padding: 13px 2px;
+    border-bottom: 1px solid rgb(255 255 255 / 12%);
+  }
+
+  /* Expandable rows read as tappable (the labels are <p>, not links) */
+  body.concept-1a #nav .nav-sections li:has(> ul) > a,
+  body.concept-1a #nav .nav-sections li:has(> ul) > p {
+    cursor: pointer;
+    outline: none;
+  }
+
+  /* Chevron affordance on items that have a submenu */
+  body.concept-1a #nav .nav-sections li:has(> ul) > a::after,
+  body.concept-1a #nav .nav-sections li:has(> ul) > p::after {
+    content: '⌄';
+    margin-left: 12px;
+    font-size: 18px;
+    line-height: 1;
+    opacity: 0.7;
+    transition: transform 0.2s ease;
+  }
+
+  body.concept-1a #nav .nav-sections li[data-c1a-open] > a::after,
+  body.concept-1a #nav .nav-sections li[data-c1a-open] > p::after {
+    transform: rotate(180deg);
+  }
+
+  /* Indent nested levels */
+  body.concept-1a #nav .nav-sections li li > a,
+  body.concept-1a #nav .nav-sections li li > p {
+    padding-left: 16px;
+    font-size: 15px;
+    opacity: 0.92;
+  }
+
+  /* Staggered reveal of the top-level items when the drawer opens */
+  body.concept-1a #nav[aria-expanded='true'] .nav-sections .default-content-wrapper > ul > li {
+    animation: c1a-nav-in 0.35s ease both;
+  }
+
+  body.concept-1a #nav[aria-expanded='true'] .nav-sections .default-content-wrapper > ul > li:nth-child(2) { animation-delay: 0.05s; }
+  body.concept-1a #nav[aria-expanded='true'] .nav-sections .default-content-wrapper > ul > li:nth-child(3) { animation-delay: 0.1s; }
+  body.concept-1a #nav[aria-expanded='true'] .nav-sections .default-content-wrapper > ul > li:nth-child(4) { animation-delay: 0.15s; }
+}
+
+@keyframes c1a-nav-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.concept-1a #nav[aria-expanded='true'] .nav-sections .default-content-wrapper > ul > li {
+    animation: none;
+  }
 }

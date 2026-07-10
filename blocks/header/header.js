@@ -627,4 +627,10 @@ export default async function decorate(block) {
   navWrapper.className = 'nav-wrapper';
   navWrapper.append(nav);
   block.append(navWrapper);
+
+  // Opt-in: concept-1a theme gets a progressive (accordion) mobile nav.
+  // Additive and gated — no effect on the stock header for other pages.
+  if (document.body.classList.contains('concept-1a')) {
+    import('./concept-1a-nav.js').then((m) => m.default(nav)).catch(() => {});
+  }
 }
