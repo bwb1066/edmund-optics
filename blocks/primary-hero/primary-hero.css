@@ -20,20 +20,22 @@
 
 /* Graceful fallback for contexts that don't run block decoration JS — notably
    the DA Layout tab, or if primary-hero.js ever fails to load. There the raw
-   <picture> is still in normal flow (never promoted to .primary-hero-bg), so it
-   renders at full intrinsic size and overflows/duplicates. Style that
-   un-promoted picture as the backdrop directly. Scoped with
+   <picture> is never promoted to .primary-hero-bg and stays in normal flow
+   nested alongside the copy, so at intrinsic size it overflows/duplicates.
+   Keep it IN FLOW but cap its height (don't absolutely-position it — doing so
+   paints it over the static copy in that context and hides the text). This
+   yields a clean image-above-text stack with no overflow. Scoped with
    :not(.primary-hero-bg) so the real JS-decorated render is unaffected. */
 .primary-hero picture:not(.primary-hero-bg) {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
+  display: block;
+  max-height: 320px;
+  overflow: hidden;
   line-height: 0;
 }
 
 .primary-hero picture:not(.primary-hero-bg) img {
   width: 100%;
-  height: 100%;
+  max-height: 320px;
   object-fit: cover;
 }
 
