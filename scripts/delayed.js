@@ -1,3 +1,5 @@
+import { getMetadata } from './aem.js';
+
 function addBackToTop() {
   const btn = document.createElement('button');
   btn.className = 'back-to-top';
@@ -18,10 +20,13 @@ const SPARKLE_SVG = '<svg aria-hidden="true" focusable="false" viewBox="0 0 24 2
 
 const WIDGET_URL = 'https://bwb1066.github.io/brand-concierge/widget/brand-concierge.js';
 const WIDGET_BASE = WIDGET_URL.replace(/[^/]+$/, '');
-const SUPABASE_URL = 'https://cyjquwhkmzyedkwuaffc.supabase.co';
+// Concierge config is author-controlled via page metadata, falling back to
+// these defaults so pages without the metadata behave exactly as before.
 // eslint-disable-next-line max-len
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5anF1d2hrbXp5ZWRrd3VhZmZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwNjY4MjcsImV4cCI6MjA5MDY0MjgyN30.GkMBLXBZr9u34m4uI6ZR-2ZniLZD3RkjropjQw058k4';
-const SITE_KEY = 'edmund-optics';
+const DEFAULT_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5anF1d2hrbXp5ZWRrd3VhZmZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwNjY4MjcsImV4cCI6MjA5MDY0MjgyN30.GkMBLXBZr9u34m4uI6ZR-2ZniLZD3RkjropjQw058k4';
+const SUPABASE_URL = getMetadata('concierge-url') || 'https://cyjquwhkmzyedkwuaffc.supabase.co';
+const SUPABASE_KEY = getMetadata('concierge-key') || DEFAULT_KEY;
+const SITE_KEY = getMetadata('concierge-site') || 'edmund-optics';
 
 function addChatbot() {
   const btn = document.createElement('button');

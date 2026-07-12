@@ -1,11 +1,16 @@
-// Brand Concierge (Hugo) widget — same source/keys as scripts/delayed.js.
-// This block is the prominent inline entry point; the corner bubble is
-// suppressed on this page (see delayed.js gating on body.concept-3b).
+import { getMetadata } from '../../scripts/aem.js';
+
+// Brand Concierge (Hugo) config is author-controlled via page metadata
+// (concierge-url / concierge-key / concierge-site), with the same defaults as
+// scripts/delayed.js. This block is the prominent inline entry point; the
+// corner bubble is suppressed on this page (delayed.js gates on body.concept-3b).
 const WIDGET_URL = 'https://bwb1066.github.io/brand-concierge/widget/brand-concierge.js';
 const WIDGET_BASE = WIDGET_URL.replace(/[^/]+$/, '');
-const SUPABASE_URL = 'https://cyjquwhkmzyedkwuaffc.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5anF1d2hrbXp5ZWRrd3VhZmZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwNjY4MjcsImV4cCI6MjA5MDY0MjgyN30.GkMBLXBZr9u34m4uI6ZR-2ZniLZD3RkjropjQw058k4';
-const SITE_KEY = 'eo-concept-3b';
+// eslint-disable-next-line max-len
+const DEFAULT_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN5anF1d2hrbXp5ZWRrd3VhZmZjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzUwNjY4MjcsImV4cCI6MjA5MDY0MjgyN30.GkMBLXBZr9u34m4uI6ZR-2ZniLZD3RkjropjQw058k4';
+const SUPABASE_URL = getMetadata('concierge-url') || 'https://cyjquwhkmzyedkwuaffc.supabase.co';
+const SUPABASE_KEY = getMetadata('concierge-key') || DEFAULT_KEY;
+const SITE_KEY = getMetadata('concierge-site') || 'edmund-optics';
 
 const DEFAULTS = {
   eyebrow: 'Ask Hugo, your Edmund Optics AI Concierge',
