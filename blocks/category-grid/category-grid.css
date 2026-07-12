@@ -74,3 +74,169 @@
     gap: 18px;
   }
 }
+
+/* ============================================================
+   Variant: category-grid (paged) — used by eo-concept-3b.
+   Overlaid labels, collapse-to-one-row with prev/next reveal, and a
+   focus-on-hover treatment (siblings dim/blur). The base block above is
+   unaffected (these rules all require the .paged class).
+   ============================================================ */
+.category-grid.paged .category-grid-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.category-grid.paged .category-grid-count {
+  font-size: 13px;
+  font-weight: 700;
+  color: #999;
+}
+
+.category-grid.paged .category-grid-arrow {
+  width: 46px;
+  height: 46px;
+  border: 0;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 18%);
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: 800;
+  color: #111;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+.category-grid.paged .category-grid-next {
+  background: var(--cta-color, #ffcd00);
+  color: #000;
+}
+
+.category-grid.paged .category-grid-arrow:hover:not(:disabled) {
+  transform: scale(1.08);
+  box-shadow: 0 6px 18px rgb(0 0 0 / 28%);
+}
+
+.category-grid.paged .category-grid-arrow:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* Collapse / expand */
+.category-grid.paged .category-grid-wrap {
+  overflow: hidden;
+  max-height: 260px;
+  transition: max-height 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.category-grid.paged.is-expanded .category-grid-wrap {
+  max-height: 1600px;
+}
+
+.category-grid.paged .category-grid-items {
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+/* Overlaid label on a scrim, instead of the base below-image label */
+.category-grid.paged .category-grid-img {
+  aspect-ratio: auto;
+  height: 240px;
+  border-radius: 6px;
+}
+
+.category-grid.paged .category-grid-img::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgb(0 0 0 / 60%), transparent 55%);
+}
+
+.category-grid.paged .category-grid-card {
+  position: relative;
+}
+
+.category-grid.paged .category-grid-name {
+  position: absolute;
+  left: 16px;
+  bottom: 14px;
+  margin: 0;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 800;
+  text-align: left;
+}
+
+/* Focus-on-hover: dim/blur siblings, pop the hovered tile */
+@media (hover: hover) {
+  .category-grid.paged .category-grid-items:hover .category-grid-card {
+    filter: blur(3px);
+    opacity: 0.5;
+    transition: filter 0.35s ease, opacity 0.35s ease;
+  }
+
+  .category-grid.paged .category-grid-items:hover .category-grid-card:hover {
+    filter: none;
+    opacity: 1;
+  }
+}
+
+@media (width >= 900px) {
+  .category-grid.paged .category-grid-items {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Extra breathing room below the sticky nav before the eyebrow */
+.category-grid.paged {
+  display: block;
+  padding-top: 64px;
+}
+
+/* Paged header: eyebrow + title (left), pager controls (right) */
+.category-grid.paged .category-grid-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+/* Left-facing arrow affordance (opens the Shop menu) */
+.category-grid.paged .category-grid-eyebrow::before {
+  content: '\2190';
+  margin-right: 8px;
+}
+
+.category-grid.paged .category-grid-header .category-grid-controls {
+  margin-bottom: 0;
+}
+
+.category-grid.paged .category-grid-eyebrow {
+  display: inline-block;
+  margin: 0 0 8px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--cta-color, #ffcd00);
+  font-family: inherit;
+  font-weight: 800;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.category-grid.paged .category-grid-eyebrow:hover {
+  text-decoration: underline;
+}
+
+.category-grid.paged .category-grid-title {
+  margin: 0;
+  font-size: clamp(30px, 4.2vw, 46px);
+  font-weight: 900;
+  line-height: 0.98;
+  color: var(--text-color, #131313);
+}

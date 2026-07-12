@@ -1,0 +1,124 @@
+/* Full-bleed: the grey band reaches both viewport edges (same technique as
+   hero-carousel / split-banner), while the content stays centered. */
+main > .section:has(.ask-hugo) {
+  margin: 0;
+}
+
+main > .section:has(.ask-hugo) > div {
+  padding: 0;
+  max-width: none;
+}
+
+.ask-hugo {
+  background: #f5f4ef;
+  border-top: 1px solid #e7e6e0;
+  border-bottom: 1px solid #e7e6e0;
+}
+
+.ask-hugo .ask-hugo-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 64px var(--page-margin) 56px;
+}
+
+.ask-hugo .ask-hugo-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+  color: #8a8a86;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.ask-hugo .ask-hugo-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--cta-color, #ffcd00);
+  color: #000;
+  font-weight: 900;
+  font-size: 16px;
+}
+
+.ask-hugo .ask-hugo-heading {
+  margin: 0 0 26px;
+  font-size: clamp(28px, 4.2vw, 44px);
+  font-weight: 800;
+  line-height: 1.02;
+  color: var(--text-color, #131313);
+}
+
+.ask-hugo .ask-hugo-form {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 680px;
+  padding: 10px 10px 10px 24px;
+  background: #161616;
+  border-radius: 40px;
+}
+
+.ask-hugo .ask-hugo-input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: none;
+  background: transparent;
+  color: #fff;
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 500;
+  padding: 9px 0;
+}
+
+.ask-hugo .ask-hugo-input::placeholder {
+  color: #8f8f8f;
+}
+
+.ask-hugo .ask-hugo-submit {
+  flex-shrink: 0;
+  width: 46px;
+  height: 46px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--cta-color, #ffcd00);
+  color: #000;
+  font-size: 20px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.ask-hugo .ask-hugo-submit:hover {
+  background: var(--cta-color-hover, #e6b900);
+}
+
+.ask-hugo .ask-hugo-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.ask-hugo .ask-hugo-chip {
+  border: 1px solid #d8d7d0;
+  border-radius: 20px;
+  background: transparent;
+  color: #555;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.ask-hugo .ask-hugo-chip:hover {
+  border-color: var(--link-color, #3b63fb);
+  color: var(--link-color, #3b63fb);
+}

@@ -49,4 +49,6 @@ function addChatbot() {
 }
 
 addBackToTop();
-addChatbot();
+// eo-concept-3b provides its own prominent inline Hugo entry (ask-hugo block),
+// so suppress the global corner bubble there.
+if (!document.body.classList.contains('concept-3b')) addChatbot();
