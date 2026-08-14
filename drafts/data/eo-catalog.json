@@ -1,0 +1,309 @@
+{
+  "site_key": "eo-concept-3b",
+  "currency": "USD",
+  "facet_hints": ["diameter", "focal length", "coating", "wavelength", "damage threshold"],
+  "products": [
+    {
+      "sku": "42722",
+      "name": "12.7mm Dia. x 50mm FL, Uncoated, Laser Grade PCX Lens",
+      "description": "TECHSPEC Laser Grade Plano-Convex (PCX) lens with 10-5 surface quality for Nd:YAG, laser cutting, machining, and welding applications.",
+      "category": "Laser Optics",
+      "image_url": "/drafts/images/eo-concept-1a/cat-laser-optics.jpg",
+      "product_url": "/drafts/pdp",
+      "list_price": 68.5,
+      "uom": "each",
+      "specs": {
+        "diameter": "12.7 mm",
+        "focal length": "50 mm",
+        "coating": "Uncoated",
+        "wavelength": "N/A",
+        "damage threshold": "10 J/cm² @ 1064 nm"
+      },
+      "price_breaks": [
+        { "min_qty": 10, "unit_price": 61.65 },
+        { "min_qty": 50, "unit_price": 54.8 }
+      ],
+      "stock_qty": 340,
+      "lead_time_days": 0,
+      "min_order_qty": 1,
+      "restricted": false
+    },
+    {
+      "sku": "49278",
+      "name": "25mm Dia. x 50mm FL, VIS 0° Coated, Achromatic Doublet Lens",
+      "description": "TECHSPEC air-spaced achromatic doublet, VIS 0° AR-coated, color-corrected for high-resolution broadband imaging from 400–700 nm.",
+      "category": "Optics",
+      "image_url": "/drafts/images/eo-concept-1a/cat-optics.jpg",
+      "product_url": "/drafts/pdp",
+      "list_price": 112.0,
+      "uom": "each",
+      "specs": {
+        "diameter": "25 mm",
+        "focal length": "50 mm",
+        "coating": "VIS 0° (400–700 nm)",
+        "wavelength": "400–700 nm",
+        "damage threshold": "N/A"
+      },
+      "price_breaks": [
+        { "min_qty": 10, "unit_price": 100.8 },
+        { "min_qty": 40, "unit_price": 89.6 }
+      ],
+      "stock_qty": 28,
+      "lead_time_days": 21,
+      "min_order_qty": 1,
+      "restricted": false
+    },
+    {
+      "sku": "33421",
+      "name": "25mm Dia., 400–700nm, Broadband Dielectric Mirror",
+      "description": "High-reflectivity broadband dielectric mirror, Ravg > 99% across the visible, ideal for beam steering in imaging and metrology setups.",
+      "category": "Optics",
+      "image_url": "/drafts/images/eo-concept-1a/hero-red-lens.jpg",
+      "product_url": "/drafts/pdp",
+      "list_price": 84.0,
+      "uom": "each",
+      "specs": {
+        "diameter": "25 mm",
+        "focal length": "N/A",
+        "coating": "Broadband dielectric",
+        "wavelength": "400–700 nm",
+        "damage threshold": "0.25 J/cm² @ 532 nm"
+      },
+      "price_breaks": [
+        { "min_qty": 10, "unit_price": 75.6 }
+      ],
+      "stock_qty": 156,
+      "lead_time_days": 0,
+      "min_order_qty": 1,
+      "restricted": false
+    },
+    {
+      "sku": "47509",
+      "name": "25mm Dia., 50R/50T, VIS Plate Beamsplitter",
+      "description": "Broadband plate beamsplitter, 50R/50T for 400–700 nm, minimal transmitted wavefront distortion for interferometry and imaging.",
+      "category": "Optics",
+      "image_url": "/drafts/images/eo-concept-1a/hero-array.jpg",
+      "product_url": "/drafts/pdp",
+      "list_price": 129.0,
+      "uom": "each",
+      "specs": {
+        "diameter": "25 mm",
+        "focal length": "N/A",
+        "coating": "50R/50T beamsplitter",
+        "wavelength": "400–700 nm",
+        "damage threshold": "N/A"
+      },
+      "price_breaks": [
+        { "min_qty": 10, "unit_price": 116.1 }
+      ],
+      "stock_qty": 62,
+      "lead_time_days": 0,
+      "min_order_qty": 1,
+      "restricted": false
+    },
+    {
+      "sku": "86112",
+      "name": "532nm CWL, 10nm FWHM, 25mm Dia. Hard-Coated Bandpass Filter",
+      "description": "TECHSPEC hard-coated bandpass filter with deep out-of-band blocking (OD6) for fluorescence, Raman, and laser-line cleanup.",
+      "category": "Optics",
+      "image_url": "/drafts/images/eo-concept-1a/hero-blue.webp",
+      "product_url": "/drafts/pdp",
+      "list_price": 195.0,
+      "uom": "each",
+      "specs": {
+        "diameter": "25 mm",
+        "focal length": "N/A",
+        "coating": "Hard-coated bandpass",
+        "wavelength": "532 nm CWL, 10 nm FWHM",
+        "damage threshold": "N/A"
+      },
+      "price_breaks": [
+        { "min_qty": 5, "unit_price": 175.5 },
+        { "min_qty": 25, "unit_price": 156.0 }
+      ],
+      "stock_qty": 44,
+      "lead_time_days": 0,
+      "min_order_qty": 1,
+      "restricted": false
+    },
+    {
+      "sku": "58201",
+      "name": "1064nm, 25mm Dia. x 100mm FL, High-Power Nd:YAG Focusing Lens",
+      "description": "Export-controlled high-damage-threshold focusing lens for high-power 1064 nm Nd:YAG systems. Sold subject to export screening.",
+      "category": "Laser Optics",
+      "image_url": "/drafts/images/eo-concept-1a/cat-lasers.jpg",
+      "product_url": "/drafts/pdp",
+      "list_price": 420.0,
+      "uom": "each",
+      "specs": {
+        "diameter": "25 mm",
+        "focal length": "100 mm",
+        "coating": "1064 nm V-coat",
+        "wavelength": "1064 nm",
+        "damage threshold": "20 J/cm² @ 1064 nm, 20 ns"
+      },
+      "price_breaks": [
+        { "min_qty": 10, "unit_price": 378.0 }
+      ],
+      "stock_qty": 12,
+      "lead_time_days": 35,
+      "min_order_qty": 1,
+      "restricted": true,
+      "restriction": "EAR export-controlled — requires entitlement screening"
+    },
+    {
+      "sku": "39751",
+      "name": "50mm Dia. x 200mm FL, MgF2 Coated, Achromatic Doublet Lens",
+      "description": "Large-aperture achromatic doublet with single-layer MgF2 AR coating for broadband imaging and beam relay.",
+      "category": "Optics",
+      "image_url": "/drafts/images/eo-concept-1a/cat-imaging.jpg",
+      "product_url": "/drafts/pdp",
+      "list_price": 268.0,
+      "uom": "each",
+      "specs": {
+        "diameter": "50 mm",
+        "focal length": "200 mm",
+        "coating": "MgF2 (400–700 nm)",
+        "wavelength": "400–700 nm",
+        "damage threshold": "N/A"
+      },
+      "price_breaks": [
+        { "min_qty": 5, "unit_price": 241.2 },
+        { "min_qty": 20, "unit_price": 214.4 }
+      ],
+      "stock_qty": 0,
+      "lead_time_days": 42,
+      "min_order_qty": 1,
+      "restricted": false
+    },
+    {
+      "sku": "45215",
+      "name": "1\" Dia. Ø25.4mm, Right-Angle Prism, Uncoated N-BK7",
+      "description": "Precision N-BK7 right-angle prism for beam folding and image rotation; 60-40 scratch-dig on all faces.",
+      "category": "Optics",
+      "image_url": "/drafts/images/eo-concept-1a/hero-array.jpg",
+      "product_url": "/drafts/pdp",
+      "list_price": 57.0,
+      "uom": "each",
+      "specs": {
+        "diameter": "25.4 mm",
+        "focal length": "N/A",
+        "coating": "Uncoated N-BK7",
+        "wavelength": "N/A",
+        "damage threshold": "N/A"
+      },
+      "price_breaks": [
+        { "min_qty": 10, "unit_price": 51.3 },
+        { "min_qty": 50, "unit_price": 45.6 }
+      ],
+      "stock_qty": 210,
+      "lead_time_days": 0,
+      "min_order_qty": 1,
+      "restricted": false
+    },
+    {
+      "sku": "71833",
+      "name": "Ø25mm, 0.65 NA, Plan Achromat Microscope Objective 40X",
+      "description": "Infinity-corrected 40X plan achromat objective with flat field for brightfield microscopy and machine vision.",
+      "category": "Microscopy",
+      "image_url": "/drafts/images/eo-concept-1a/cat-microscopy.jpg",
+      "product_url": "/drafts/pdp",
+      "list_price": 349.0,
+      "uom": "each",
+      "specs": {
+        "diameter": "25 mm",
+        "focal length": "N/A",
+        "coating": "Broadband AR",
+        "wavelength": "Visible",
+        "damage threshold": "N/A"
+      },
+      "price_breaks": [
+        { "min_qty": 5, "unit_price": 314.1 }
+      ],
+      "stock_qty": 19,
+      "lead_time_days": 14,
+      "min_order_qty": 1,
+      "restricted": false
+    },
+    {
+      "sku": "60427",
+      "name": "Ø25.4mm, Ø200mm FL, UV Fused Silica PCX Lens, Uncoated",
+      "description": "UV-grade fused silica plano-convex lens for deep-UV through NIR transmission and high laser damage resistance.",
+      "category": "Laser Optics",
+      "image_url": "/drafts/images/eo-concept-1a/cat-laser-optics.jpg",
+      "product_url": "/drafts/pdp",
+      "list_price": 96.0,
+      "uom": "each",
+      "specs": {
+        "diameter": "25.4 mm",
+        "focal length": "200 mm",
+        "coating": "Uncoated UVFS",
+        "wavelength": "185–2100 nm",
+        "damage threshold": "15 J/cm² @ 1064 nm"
+      },
+      "price_breaks": [
+        { "min_qty": 10, "unit_price": 86.4 },
+        { "min_qty": 50, "unit_price": 76.8 }
+      ],
+      "stock_qty": 88,
+      "lead_time_days": 0,
+      "min_order_qty": 1,
+      "restricted": false
+    },
+    {
+      "sku": "52940",
+      "name": "USAF 1951 Resolution Test Target, 2\" x 2\", Positive",
+      "description": "Chrome-on-glass USAF 1951 positive resolution target for characterizing imaging system MTF and alignment.",
+      "category": "Test Targets",
+      "image_url": "/drafts/images/eo-concept-1a/cat-testtargets.jpg",
+      "product_url": "/drafts/pdp",
+      "list_price": 205.0,
+      "uom": "each",
+      "specs": {
+        "diameter": "50.8 x 50.8 mm",
+        "focal length": "N/A",
+        "coating": "Chrome-on-glass",
+        "wavelength": "N/A",
+        "damage threshold": "N/A"
+      },
+      "price_breaks": [
+        { "min_qty": 5, "unit_price": 184.5 }
+      ],
+      "stock_qty": 33,
+      "lead_time_days": 0,
+      "min_order_qty": 1,
+      "restricted": false
+    },
+    {
+      "sku": "38119",
+      "name": "Ø1\" Broadband Polarizing Cube Beamsplitter, 420–680nm",
+      "description": "High-extinction polarizing beamsplitter cube (Tp:Ts > 1000:1) for visible-band polarization control and analysis.",
+      "category": "Optics",
+      "image_url": "/drafts/images/eo-concept-1a/hero-blue.webp",
+      "product_url": "/drafts/pdp",
+      "list_price": 178.0,
+      "uom": "each",
+      "specs": {
+        "diameter": "25.4 mm",
+        "focal length": "N/A",
+        "coating": "Polarizing beamsplitter",
+        "wavelength": "420–680 nm",
+        "damage threshold": "N/A"
+      },
+      "price_breaks": [
+        { "min_qty": 10, "unit_price": 160.2 }
+      ],
+      "stock_qty": 41,
+      "lead_time_days": 0,
+      "min_order_qty": 1,
+      "restricted": false
+    }
+  ],
+  "buyers": {
+    "acme-photonics": {
+      "company": "Acme Photonics (contract account)",
+      "price_book": { "49278": 82.5, "39751": 199.0 },
+      "entitlements": ["export-controlled"]
+    }
+  }
+}
