@@ -70,7 +70,7 @@ function renderPanel() {
   if (buyer) {
     const banner = document.createElement('p');
     banner.className = 'quote-cart-buyer';
-    banner.textContent = `Contract pricing applied · ${buyer.company}`;
+    banner.textContent = `Contract pricing applied · ${buyer.company || buyer.key}`;
     panel.append(banner);
   }
 
@@ -153,7 +153,7 @@ export default function decorate(block) {
   buildDrawer();
 
   const sync = () => {
-    setBadges(store.quoteCount());
+    setBadges(store.quoteCount(store.getQuote()));
     if (drawer.classList.contains('is-open')) renderPanel();
   };
   store.subscribe(sync);
@@ -161,9 +161,9 @@ export default function decorate(block) {
   // The header loads lazily; wire the badge/link as soon as it appears.
   if (!wireHeaderCart()) {
     const obs = new MutationObserver(() => {
-      if (wireHeaderCart()) { setBadges(store.quoteCount()); obs.disconnect(); }
+      if (wireHeaderCart()) { setBadges(store.quoteCount(store.getQuote())); obs.disconnect(); }
     });
     obs.observe(document.body, { childList: true, subtree: true });
   }
-  setBadges(store.quoteCount());
+  setBadges(store.quoteCount(store.getQuote()));
 }

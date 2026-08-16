@@ -36,6 +36,9 @@ const CARTID_KEY = `commerce_cartid_${SITE_KEY}`;
 // Label the concierge/agent surfaces show on their add-to-quote control. B2C
 // tenants can set `commerce-cta-label: Add to cart` in page metadata.
 const CTA_LABEL = getMetadata('commerce-cta-label') || 'Add to quote';
+// PDP template path — product cards link here with ?sku=<sku> so any catalog
+// product resolves on one dynamic product page.
+const PDP_URL = getMetadata('commerce-pdp') || '/drafts/pdp';
 
 const listeners = new Set();
 let currentBuyer = null; // LOCAL: full object; REMOTE: { key }
@@ -402,6 +405,7 @@ const store = {
   remote: REMOTE,
   enabled: true,
   ctaLabel: CTA_LABEL,
+  pdpUrl: PDP_URL,
   formatPrice,
   resolvePrice,
   priceTable,
