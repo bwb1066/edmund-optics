@@ -66,9 +66,15 @@ function buildCard(product) {
   card.className = 'product-card';
   card.dataset.sku = product.sku;
 
+  // Link to the dynamic PDP template (?sku=) so browse → product detail works
+  // for any catalog product; fall back to the product's own URL if no sku.
+  const href = product.sku
+    ? `${store.pdpUrl}?sku=${encodeURIComponent(product.sku)}`
+    : (product.product_url || '#');
+
   const media = document.createElement('a');
   media.className = 'product-card-media';
-  media.href = product.product_url || '#';
+  media.href = href;
   media.innerHTML = `<img src="${product.image_url}" alt="" loading="lazy">`;
   media.append(availabilityPill(product));
 
@@ -81,7 +87,7 @@ function buildCard(product) {
 
   const title = document.createElement('h3');
   title.className = 'product-card-title';
-  title.innerHTML = `<a href="${product.product_url || '#'}">${product.name}</a>`;
+  title.innerHTML = `<a href="${href}">${product.name}</a>`;
 
   const sku = document.createElement('p');
   sku.className = 'product-card-sku';

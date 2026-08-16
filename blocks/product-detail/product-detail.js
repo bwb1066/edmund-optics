@@ -59,7 +59,11 @@ function priceGrid(product, activeQty) {
 }
 
 export default async function decorate(block) {
-  const sku = readSku(block);
+  // Dynamic PDP: ?sku=<sku> in the URL wins, so one page template serves every
+  // catalog product; the authored `sku` row is the fallback/default.
+  const urlSku = (typeof window !== 'undefined')
+    ? new URLSearchParams(window.location.search).get('sku') : null;
+  const sku = urlSku || readSku(block);
   const product = await store.getProduct(sku);
 
   if (!product) {
@@ -83,7 +87,7 @@ export default async function decorate(block) {
   head.className = 'product-detail-head';
   head.innerHTML = `
     <p class="product-detail-eyebrow">${product.category || ''}</p>
-    <h2 class="product-detail-name">${product.name}</h2>
+    <h1 class="product-detail-name">${product.name}</h1>
     <p class="product-detail-sku">Stock #${product.sku}</p>
     <p class="product-detail-desc">${product.description || ''}</p>`;
 
