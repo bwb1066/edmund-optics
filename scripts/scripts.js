@@ -11,6 +11,7 @@ import {
   loadSections,
   loadCSS,
 } from './aem.js';
+import initWebSDK from './websdk.js';
 
 /**
  * Builds hero block and prepends to main in a new section.
@@ -157,6 +158,9 @@ async function loadEager(doc) {
  * @param {Element} doc The container element
  */
 async function loadLazy(doc) {
+  // Install the Adobe Web SDK command queue before blocks decorate, so
+  // consumers (knowledge-content) find window.alloy. No-op until configured.
+  initWebSDK();
   loadHeader(doc.querySelector('header'));
 
   const main = doc.querySelector('main');
