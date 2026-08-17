@@ -12,7 +12,7 @@ import {
   loadCSS,
 } from './aem.js';
 import initWebSDK from './websdk.js';
-import initChatPersonalization from './personalization.js';
+import initPersonalization from './personalization.js';
 
 /**
  * Builds hero block and prepends to main in a new section.
@@ -162,8 +162,8 @@ async function loadLazy(doc) {
   // Install the Adobe Web SDK command queue before blocks decorate, so
   // consumers (knowledge-content) find window.alloy. No-op until configured.
   initWebSDK();
-  // Listen for Brand Chat turns → infer audience → enrich the AEP profile.
-  initChatPersonalization();
+  // Chat turns + knowledge-center views → audience signal → AEP profile.
+  initPersonalization();
   loadHeader(doc.querySelector('header'));
 
   const main = doc.querySelector('main');
