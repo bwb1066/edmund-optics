@@ -85,7 +85,21 @@ export default async function decorate(block) {
   // 4. Load only the chosen fragment.
   if (path) {
     const fragment = await loadFragment(path);
-    if (fragment) block.replaceChildren(...fragment.childNodes);
+    if (fragment) {
+      block.replaceChildren(...fragment.childNodes);
+      // DA-authored fragments lose authored classes (kc-eyebrow / kc-cta), so
+      // re-apply them structurally: first paragraph is the eyebrow, the last
+      // link is the CTA (strip any button decoration it picked up).
+      const firstPara = block.querySelector('p');
+      if (firstPara && !firstPara.querySelector('a')) firstPara.classList.add('kc-eyebrow');
+      const links = block.querySelectorAll('a');
+      const cta = links[links.length - 1];
+      if (cta) {
+        cta.classList.remove('button');
+        cta.classList.add('kc-cta');
+        cta.parentElement?.classList.remove('button-container');
+      }
+    }
   }
 
   block.classList.remove('is-loading');
