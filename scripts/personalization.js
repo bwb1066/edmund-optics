@@ -78,9 +78,17 @@ function recordSignal(audience, source, extra = {}) {
   }
 }
 
-// Restore the leading audience from earlier in-session signals BEFORE blocks
-// (knowledge-content) decorate on a fresh page.
+// Restore the audience BEFORE blocks (knowledge-content) decorate on a fresh
+// page: an explicit demo-panel override wins, else the leading in-session signal.
 function applyStoredAudience() {
+  let override = null;
+  try {
+    override = sessionStorage.getItem('eo_audience_override');
+  } catch (e) { /* private mode */ }
+  if (override) {
+    window.eoAudience = override;
+    return;
+  }
   const lead = leadingAudience(readTally());
   if (lead) window.eoAudience = lead;
 }

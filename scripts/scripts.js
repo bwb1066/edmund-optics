@@ -159,6 +159,11 @@ async function loadEager(doc) {
  * @param {Element} doc The container element
  */
 async function loadLazy(doc) {
+  // Demo control + Web SDK inspector (gated behind ?demo). Loaded first so its
+  // alloy logger captures the SDK/personalization events that follow.
+  const demoPanel = await import('./demo-panel.js');
+  if (demoPanel.demoEnabled()) demoPanel.default();
+
   // Install the Adobe Web SDK command queue before blocks decorate, so
   // consumers (knowledge-content) find window.alloy. No-op until configured.
   initWebSDK();
