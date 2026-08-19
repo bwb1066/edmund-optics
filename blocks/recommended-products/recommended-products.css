@@ -1,0 +1,96 @@
+.recommended-products {
+  max-width: var(--grid-container-width, 1200px);
+  margin-inline: auto;
+  padding-inline: 20px;
+}
+
+.recommended-products .recommended-products-heading {
+  margin: 0 0 16px;
+  font-size: var(--heading-font-size-m, 24px);
+}
+
+.recommended-products .recommended-products-strip {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(200px, 1fr);
+  gap: 16px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  scroll-snap-type: x mandatory;
+}
+
+.recommended-products .recommended-product {
+  display: flex;
+  flex-direction: column;
+  scroll-snap-align: start;
+  padding: 12px;
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.recommended-products .recommended-product-media {
+  display: block;
+  aspect-ratio: 4 / 3;
+  margin-bottom: 10px;
+  overflow: hidden;
+  border-radius: 6px;
+  background: #f3f3f3;
+}
+
+.recommended-products .recommended-product-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.recommended-products .recommended-product-cat {
+  margin: 0 0 4px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #767676;
+}
+
+.recommended-products .recommended-product-name {
+  margin: 0 0 8px;
+  color: inherit;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.3;
+  text-decoration: none;
+
+  /* stylelint-disable-next-line value-no-vendor-prefix */
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.recommended-products .recommended-product-name:hover {
+  text-decoration: underline;
+}
+
+.recommended-products .recommended-product-price {
+  margin: 0 0 10px auto;
+  font-weight: 700;
+}
+
+.recommended-products .recommended-product-add {
+  margin-top: auto;
+  padding: 9px 10px;
+  font: inherit;
+  font-weight: 700;
+  font-size: 13px;
+  color: #131313;
+  background: var(--cta-color, #ffcd00);
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.recommended-products .recommended-product-add.is-added {
+  color: #fff;
+  background: #1a7f37;
+}
