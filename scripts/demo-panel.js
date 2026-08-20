@@ -31,7 +31,14 @@ let els = {};
 
 export function demoEnabled() {
   const params = new URLSearchParams(window.location.search);
-  if (params.has('demo')) sessionStorage.setItem(DEMO_FLAG, '1');
+  if (params.has('demo')) {
+    const v = params.get('demo');
+    if (v === '0' || v === 'off' || v === 'false') {
+      sessionStorage.removeItem(DEMO_FLAG);
+      return false;
+    }
+    sessionStorage.setItem(DEMO_FLAG, '1');
+  }
   return sessionStorage.getItem(DEMO_FLAG) === '1';
 }
 
@@ -133,6 +140,14 @@ function reset() {
   render();
 }
 
+// Turn the demo off entirely: clear state + the sticky flag and remove the UI.
+function exitDemo() {
+  reset();
+  sessionStorage.removeItem(DEMO_FLAG);
+  els.tab?.remove();
+  els.panel?.remove();
+}
+
 const STYLES = `
 .eo-demo-tab{position:fixed;right:0;top:38%;z-index:2147483000;display:flex;align-items:center;gap:8px;
   padding:10px 12px;background:#1d1d1d;color:#fff;border:0;border-right:4px solid ${ADOBE_RED};
@@ -157,6 +172,7 @@ const STYLES = `
 .eo-demo-account{width:100%}
 .eo-demo-account.is-on{background:#1a7f37;border-color:#1a7f37;color:#fff}
 .eo-demo-reset{width:100%;padding:8px;border:0;background:none;color:${ADOBE_RED};cursor:pointer;font:inherit;font-weight:600}
+.eo-demo-exit{width:100%;padding:9px;border:1px solid #d9d9d9;border-radius:6px;background:#fff;color:#555;cursor:pointer;font:inherit;font-weight:600}
 .eo-demo-state{padding:10px 12px;border-radius:6px;background:#f4f4f4;font-size:13px}
 .eo-demo-state b{color:#111}
 .eo-demo-inspector{flex:1;border-top:1px solid #eee;padding:14px 18px;overflow:auto;background:#fafafa}
@@ -200,6 +216,7 @@ function build() {
       </div>
       <div class="eo-demo-state">Current: <b class="eo-demo-statev">Anonymous</b></div>
       <button class="eo-demo-reset" type="button">Reset to anonymous</button>
+      <button class="eo-demo-exit" type="button">Exit demo</button>
     </div>
     <div class="eo-demo-inspector">
       <h4>Datastream events</h4>
@@ -210,9 +227,12 @@ function build() {
   document.body.append(tab, panel);
 
   els = {
+    tab,
+    panel,
     aud: panel.querySelector('.eo-demo-aud'),
     account: panel.querySelector('.eo-demo-account'),
     reset: panel.querySelector('.eo-demo-reset'),
+    exit: panel.querySelector('.eo-demo-exit'),
     state: panel.querySelector('.eo-demo-statev'),
     log: panel.querySelector('.eo-demo-log'),
   };
@@ -228,6 +248,7 @@ function build() {
 
   els.account.addEventListener('click', () => setBuyer(ss.buyer() !== ACME));
   els.reset.addEventListener('click', reset);
+  els.exit.addEventListener('click', exitDemo);
   tab.addEventListener('click', () => panel.classList.toggle('open'));
   panel.querySelector('.x').addEventListener('click', () => panel.classList.remove('open'));
 }
