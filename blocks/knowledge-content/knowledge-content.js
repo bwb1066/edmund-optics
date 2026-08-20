@@ -1,5 +1,3 @@
-import { loadFragment } from '../fragment/fragment.js';
-
 // Adobe Target decision scope that returns the inferred audience for this PDP.
 const DECISION_SCOPE = 'pdp-knowledge';
 // Never let an audience lookup block the PDP — fall back to default after this.
@@ -82,24 +80,31 @@ export default async function decorate(block) {
   // Demo affordance: when overridden via ?audience=, badge which experience shows.
   if (new URLSearchParams(window.location.search).has('audience')) block.classList.add('kc-demo');
 
-  // 4. Load only the chosen fragment.
+  // 4. Load the chosen fragment with a plain fetch + inject. Deliberately does
+  //    NOT use loadFragment(): its decorateMain/loadSections pipeline runs on a
+  //    detached <main> and leaves the loaded sections hidden inside this block.
+  //    The fragments are simple content, so raw injection is enough — and the
+  //    block's CSS (descendant selectors) styles it directly.
   if (path) {
-    const fragment = await loadFragment(path);
-    if (fragment) {
-      block.replaceChildren(...fragment.childNodes);
-      // DA-authored fragments lose authored classes (kc-eyebrow / kc-cta), so
-      // re-apply them structurally: first paragraph is the eyebrow, the last
-      // link is the CTA (strip any button decoration it picked up).
-      const firstPara = block.querySelector('p');
-      if (firstPara && !firstPara.querySelector('a')) firstPara.classList.add('kc-eyebrow');
-      const links = block.querySelectorAll('a');
-      const cta = links[links.length - 1];
-      if (cta) {
-        cta.classList.remove('button');
-        cta.classList.add('kc-cta');
-        cta.parentElement?.classList.remove('button-container');
+    try {
+      const resp = await fetch(`${path}.plain.html`);
+      if (resp.ok) {
+        const tmp = document.createElement('div');
+        tmp.innerHTML = await resp.text();
+        block.replaceChildren(...tmp.childNodes);
+        // DA-authored fragments lose authored classes (kc-eyebrow / kc-cta), so
+        // re-apply them: first paragraph is the eyebrow, last link is the CTA.
+        const firstPara = block.querySelector('p');
+        if (firstPara && !firstPara.querySelector('a')) firstPara.classList.add('kc-eyebrow');
+        const links = block.querySelectorAll('a');
+        const cta = links[links.length - 1];
+        if (cta) {
+          cta.classList.remove('button');
+          cta.classList.add('kc-cta');
+          cta.parentElement?.classList.remove('button-container');
+        }
       }
-    }
+    } catch (e) { /* leave the skeleton empty rather than break the PDP */ }
   }
 
   block.classList.remove('is-loading');
