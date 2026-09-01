@@ -2,21 +2,27 @@ import { getMetadata } from './aem.js';
 import config from './aep-config.js';
 
 /**
- * Turn behavior into an audience signal, from two sources:
- *   - Brand Chat turns (the widget's `config.chatEventName` event)
- *   - Knowledge Center (and any audience-tagged) page views
+ * Two things live here:
  *
- * Each signal (a) updates a per-session tally and sets window.eoAudience to the
- * leading audience — so on-page consumers (knowledge-content) personalize
- * immediately, even before Adobe is live — and (b) pushes a DERIVED event to
- * Adobe via the Web SDK for unified-profile enrichment (GATED on window.alloy,
- * so it's inert until the SDK is configured; see websdk.js). Raw prompt text is
- * never sent — only the derived audience/topic.
+ * 1. `track()` — a generic, low-level XDM event sender. This is the
+ *    future-proofing mechanism: any block, current or not-yet-written, tracks
+ *    a brand-new kind of event by calling `track('some.eventType', {...})`
+ *    directly — no changes to this file required, ever. `config.site` is
+ *    injected automatically under `config.tenantId` on every event, so the
+ *    datastream/schema SHARED with other replicas can still be filtered per
+ *    site. Inert until window.alloy exists (see websdk.js).
  *
- * Audience segments + chat classification rules, the XDM tenant namespace,
- * the chat event name, and the shared window.eoAudience/eo_-prefixed storage
- * keys (see scripts/p13n.js) all come from aep-config.js — that's the only
- * file a different site needs to edit to reuse this module.
+ * 2. Audience-signal tracking built on top of `track()`: turn behavior
+ *    (Brand Chat prompts + responses, any audience-tagged page view) into a
+ *    per-session leading-audience tally, exposed as window.eoAudience so
+ *    on-page consumers (knowledge-content) personalize immediately, even
+ *    before Adobe is live.
+ *
+ * Audience segments + chat classification rules, the shared XDM tenant id,
+ * this site's `site` identifier, the chat event name, and the shared
+ * window.eoAudience/eo_-prefixed storage keys (see scripts/p13n.js) all come
+ * from aep-config.js — that's the only file a different site needs to edit
+ * to reuse this module.
  */
 
 const KEYS = {
@@ -27,6 +33,22 @@ const KEYS = {
 const AUD_GLOBAL = config.audienceGlobal || 'aepAudience';
 
 const AUDIENCES = config.audiences.map((a) => a.key);
+
+/**
+ * Send one XDM event. `standard` holds official XDM paths (e.g.
+ * `{ web: { webPageDetails: {...} } }`); `tenant` holds fields nested under
+ * this org's shared tenant id — `site` is merged in automatically.
+ */
+export function track(eventType, { standard = {}, tenant = {} } = {}) {
+  if (typeof window.alloy !== 'function') return;
+  window.alloy('sendEvent', {
+    xdm: {
+      eventType,
+      ...standard,
+      [config.tenantId]: { site: config.site, ...tenant },
+    },
+  });
+}
 
 /** Classify free text into a configured audience key, or 'default'. */
 export function classify(text) {
@@ -68,27 +90,46 @@ function defaultEventType(source) {
   return source === 'content' ? 'web.webpagedetails.pageViews' : 'experience.chat.interaction';
 }
 
-// Record one signal: bump the session tally (skipping the neutral 'default'),
-// promote the leading audience, and enrich the Adobe profile if the SDK is live.
-export function recordSignal(audience, source, extra = {}) {
-  if (audience && audience !== 'default') {
-    const tally = readTally();
-    tally[audience] = (tally[audience] || 0) + 1;
-    try {
-      sessionStorage.setItem(KEYS.tally, JSON.stringify(tally));
-    } catch (e) { /* private mode — the signal is best-effort */ }
+// Bump the session tally (skipping the neutral 'default') and promote the
+// leading audience unless a demo-panel override is active. Returns the
+// previous leading audience so callers can detect a real change.
+function bumpTally(audience) {
+  const before = window[AUD_GLOBAL];
+  if (!audience || audience === 'default') return before;
+
+  const tally = readTally();
+  tally[audience] = (tally[audience] || 0) + 1;
+  try {
+    sessionStorage.setItem(KEYS.tally, JSON.stringify(tally));
+  } catch (e) { /* private mode — the signal is best-effort */ }
+
+  let overridden = false;
+  try {
+    overridden = !!sessionStorage.getItem(KEYS.override);
+  } catch (e) { /* private mode */ }
+  if (!overridden) {
     window[AUD_GLOBAL] = leadingAudience(tally) || window[AUD_GLOBAL];
   }
+  return before;
+}
 
-  if (typeof window.alloy === 'function') {
-    const eventType = (config.eventTypeForSource || defaultEventType)(source);
-    window.alloy('sendEvent', {
-      xdm: {
-        eventType,
-        [config.tenantId]: { signal: { source, audience: audience || 'default', ...extra } },
+// Record one signal: bump the tally, then send the derived event via
+// track() — folding in an `audienceChanged` marker on the same event
+// instead of firing a separate network call when the leading audience flips.
+export function recordSignal(audience, source, extra = {}) {
+  const before = bumpTally(audience);
+  const after = window[AUD_GLOBAL];
+  const eventType = (config.eventTypeForSource || defaultEventType)(source);
+  track(eventType, {
+    tenant: {
+      signal: {
+        source,
+        audience: audience || 'default',
+        ...(after !== before ? { audienceChanged: { from: before, to: after } } : {}),
+        ...extra,
       },
-    });
-  }
+    },
+  });
 }
 
 // Restore the audience BEFORE blocks (knowledge-content) decorate on a fresh
@@ -110,25 +151,43 @@ function wireChat() {
   if (!config.chatEventName) return;
   document.addEventListener(config.chatEventName, (e) => {
     const detail = e.detail || {};
-    if (detail.role !== 'assistant') return;
-    const hay = [
+    if (detail.role !== 'assistant' && detail.role !== 'user') return;
+    const hay = detail.role === 'user' ? (detail.prompt || '') : [
       detail.prompt || '',
       ...(detail.recommendations || []).map((r) => `${r.title || ''} ${r.reason || ''}`),
     ].join(' ');
     recordSignal(classify(hay), 'concierge', {
+      turn: detail.role === 'user' ? 'prompt' : 'response',
       recommendedCount: (detail.recommendations || []).length,
     });
   });
 }
 
-// A Knowledge Center (or any audience-tagged) page view is an implicit signal.
-function recordContentView() {
+// One real page view per load, regardless of whether this page carries
+// audience/content metadata. If it does, the derived content signal rides
+// along on the SAME event instead of a second network call.
+function trackPageView() {
   const audience = getMetadata('audience');
   const contentType = getMetadata('content-type');
-  if (!audience && !contentType) return;
-  recordSignal(audience, 'content', {
-    contentType: contentType || undefined,
-    topic: getMetadata('topic') || undefined,
+  const before = bumpTally(audience);
+  const after = window[AUD_GLOBAL];
+  track('web.webpagedetails.pageViews', {
+    standard: {
+      web: {
+        webPageDetails: {
+          name: document.title, URL: window.location.href, pageViews: { value: 1 },
+        },
+      },
+    },
+    tenant: (audience || contentType) ? {
+      signal: {
+        source: 'content',
+        audience: audience || 'default',
+        contentType: contentType || undefined,
+        topic: getMetadata('topic') || undefined,
+        ...(after !== before ? { audienceChanged: { from: before, to: after } } : {}),
+      },
+    } : {},
   });
 }
 
@@ -138,7 +197,7 @@ export default function initPersonalization() {
   if (wired) return;
   wired = true;
   applyStoredAudience();
+  trackPageView();
   wireChat();
-  recordContentView();
-  config.wireExtraSignals?.({ classify, recordSignal });
+  config.wireExtraSignals?.({ classify, recordSignal, track });
 }

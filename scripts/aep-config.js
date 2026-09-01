@@ -5,9 +5,17 @@
  * them over and only this file needs to change.
  */
 export default {
-  // XDM tenant namespace the personalization signal is written under. Must
-  // match the tenant id of whatever AEP schema the datastream points at.
-  tenantId: '_edmundoptics',
+  // The XDM tenant namespace every custom field goes under. An AEP tenant id
+  // is assigned ONCE PER IMS ORG, not per site — this org's real tenant is
+  // `_demosystem4` (confirmed against the BWBEdmundOpticsDemo schema).
+  // store-safety-kleen shares this same org/datastream and must use the same
+  // value here.
+  tenantId: '_demosystem4',
+
+  // This replica's identifier, included on every tracked event so the
+  // datastream/schema shared with other replicas can still be filtered per
+  // site.
+  site: 'edmund-optics',
 
   // Custom DOM event a chat widget dispatches with { role, prompt,
   // recommendations } detail. Leave undefined to skip chat-signal wiring.
