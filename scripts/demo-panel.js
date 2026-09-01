@@ -2,28 +2,41 @@
 /**
  * Adobe-branded demo control + Web SDK inspector, gated behind ?demo.
  *
- * - Lets you fake the personalization state (audience persona + "logged-in"
- *   contract account) without a real Target/AEP setup.
+ * - Lets you fake the personalization state (audience persona + optional
+ *   "logged-in" identity, one of `config.demoPersonas`) without a real
+ *   Target/AEP setup.
  * - Installs a logging shim over window.alloy that CAPTURES every sendEvent and
  *   pretty-prints the XDM that the Web SDK would post to the Adobe Edge /
  *   Datastream — so the inspector works even with no datastream configured
- *   (events are captured, not sent). If a real alloy exists, it forwards too.
+ *   (events are captured, not sent). Calls initWebSDK() itself first, so the
+ *   real Alloy queue is always installed before this shim wraps it — order of
+ *   imports elsewhere no longer matters.
  *
  * State lives in sessionStorage so it survives navigation during a demo, and is
- * read by personalization.js (audience override) and the commerce store (buyer).
+ * read by personalization.js (audience override), scripts/p13n.js (shared
+ * state for other blocks), and the commerce store (buyer).
+ *
+ * Audience list, demo personas, and the shared window.eoAudience/eo_-prefixed
+ * storage keys (see scripts/p13n.js) all come from aep-config.js — that's the
+ * only file a different site needs to edit to reuse this module.
  */
 
+import initWebSDK from './websdk.js';
+import config from './aep-config.js';
+
 const ADOBE_RED = '#fa0f00';
-const OVERRIDE_KEY = 'eo_audience_override';
-const BUYER_KEY = 'eo_demo_buyer';
-const DEMO_FLAG = 'eo_demo';
-const ACME = 'acme-photonics';
+const KEYS = {
+  override: 'aep_audience_override',
+  buyer: 'aep_demo_buyer',
+  demoFlag: 'aep_demo',
+  ...config.storageKeys,
+};
+const AUD_GLOBAL = config.audienceGlobal || 'aepAudience';
+const PERSONAS = config.demoPersonas || [];
 
 const AUDIENCES = [
   { key: '', label: 'Anonymous' },
-  { key: 'laser_research', label: 'Laser Researcher' },
-  { key: 'bio_imaging', label: 'Bio Imaging' },
-  { key: 'machine_vision', label: 'Machine Vision' },
+  ...config.audiences.map(({ key, label }) => ({ key, label })),
 ];
 
 const captured = [];
@@ -34,17 +47,17 @@ export function demoEnabled() {
   if (params.has('demo')) {
     const v = params.get('demo');
     if (v === '0' || v === 'off' || v === 'false') {
-      sessionStorage.removeItem(DEMO_FLAG);
+      sessionStorage.removeItem(KEYS.demoFlag);
       return false;
     }
-    sessionStorage.setItem(DEMO_FLAG, '1');
+    sessionStorage.setItem(KEYS.demoFlag, '1');
   }
-  return sessionStorage.getItem(DEMO_FLAG) === '1';
+  return sessionStorage.getItem(KEYS.demoFlag) === '1';
 }
 
 const ss = {
-  audience: () => sessionStorage.getItem(OVERRIDE_KEY) || '',
-  buyer: () => sessionStorage.getItem(BUYER_KEY) || '',
+  audience: () => sessionStorage.getItem(KEYS.override) || '',
+  buyer: () => sessionStorage.getItem(KEYS.buyer) || '',
 };
 
 // ── Web SDK capture ───────────────────────────────────────────────────────
@@ -79,16 +92,17 @@ function render() {
   if (!els.aud) return;
   const aud = ss.audience();
   const buyer = ss.buyer();
+
   els.aud.querySelectorAll('button').forEach((b) => {
     b.classList.toggle('is-on', (b.dataset.aud || '') === aud);
   });
-  const loggedIn = buyer === ACME;
-  els.account.textContent = loggedIn ? 'Logged in: Acme Photonics ✓ — log out' : 'Log in as Acme Photonics';
-  els.account.classList.toggle('is-on', loggedIn);
-  const stateLabel = loggedIn
-    ? 'Acme Photonics (contract account)'
-    : (AUDIENCES.find((a) => a.key === aud)?.label || 'Anonymous');
-  els.state.textContent = stateLabel;
+  els.ident?.querySelectorAll('button').forEach((b) => {
+    b.classList.toggle('is-on', b.dataset.persona === buyer);
+  });
+
+  const account = PERSONAS.find((p) => p.id === buyer);
+  const persona = AUDIENCES.find((a) => a.key === aud && a.key)?.label;
+  els.state.textContent = [account?.label, persona].filter(Boolean).join(' · ') || 'Anonymous';
 }
 
 // ── State changes ─────────────────────────────────────────────────────────
@@ -99,32 +113,36 @@ function announce() {
 }
 
 function setAudience(key) {
-  if (key) sessionStorage.setItem(OVERRIDE_KEY, key);
-  else sessionStorage.removeItem(OVERRIDE_KEY);
-  window.eoAudience = key || undefined;
+  if (key) sessionStorage.setItem(KEYS.override, key);
+  else sessionStorage.removeItem(KEYS.override);
+  window[AUD_GLOBAL] = key || undefined;
   // Show the decision request the site would make for this persona.
   window.alloy('sendEvent', {
     xdm: {
       eventType: 'decisioning.propositionFetch',
-      _demo: { decisionScope: 'pdp-knowledge', persona: key || 'default' },
+      _demo: { decisionScope: config.decisionScope, persona: key || 'default' },
     },
   });
   announce();
   render();
 }
 
-function setBuyer(on) {
-  if (on) sessionStorage.setItem(BUYER_KEY, ACME);
-  else sessionStorage.removeItem(BUYER_KEY);
-  window.brandCommerce?.useBuyer?.(on ? ACME : null);
-  // A login is an identity + authenticated-state signal to the Edge.
+function setBuyer(id) {
+  // Clicking the active persona logs it out.
+  const next = ss.buyer() === id ? '' : id;
+  if (next) sessionStorage.setItem(KEYS.buyer, next);
+  else sessionStorage.removeItem(KEYS.buyer);
+
+  window.brandCommerce?.useBuyer?.(next || null);
+
+  const persona = PERSONAS.find((p) => p.id === next);
   window.alloy('sendEvent', {
     xdm: {
-      eventType: on ? 'identity.authenticatedState' : 'identity.loggedOut',
-      identityMap: on
-        ? { CRMID: [{ id: ACME, primary: true, authenticatedState: 'authenticated' }] }
+      eventType: next ? 'identity.authenticatedState' : 'identity.loggedOut',
+      identityMap: next
+        ? { CRMID: [{ id: next, primary: true, authenticatedState: 'authenticated' }] }
         : {},
-      _demo: { account: on ? ACME : null, contract: on },
+      _demo: { account: persona?.label || null, contract: !!next, ...(persona?.extra || {}) },
     },
   });
   announce();
@@ -132,9 +150,9 @@ function setBuyer(on) {
 }
 
 function reset() {
-  sessionStorage.removeItem(OVERRIDE_KEY);
-  sessionStorage.removeItem(BUYER_KEY);
-  window.eoAudience = undefined;
+  sessionStorage.removeItem(KEYS.override);
+  sessionStorage.removeItem(KEYS.buyer);
+  window[AUD_GLOBAL] = undefined;
   window.brandCommerce?.useBuyer?.(null);
   announce();
   render();
@@ -143,7 +161,7 @@ function reset() {
 // Turn the demo off entirely: clear state + the sticky flag and remove the UI.
 function exitDemo() {
   reset();
-  sessionStorage.removeItem(DEMO_FLAG);
+  sessionStorage.removeItem(KEYS.demoFlag);
   els.tab?.remove();
   els.panel?.remove();
 }
@@ -166,11 +184,13 @@ const STYLES = `
 .eo-demo-body{padding:16px 18px;overflow:auto;display:flex;flex-direction:column;gap:16px}
 .eo-demo-sec>h4{margin:0 0 8px;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#767676}
 .eo-demo-aud{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.eo-demo-aud button,.eo-demo-account{padding:9px 10px;border:1px solid #d9d9d9;border-radius:6px;background:#fff;
+.eo-demo-ident{display:grid;gap:8px}
+.eo-demo-aud button,.eo-demo-ident button{padding:9px 10px;border:1px solid #d9d9d9;border-radius:6px;background:#fff;
   cursor:pointer;font:inherit;font-weight:600;color:#333;text-align:center}
 .eo-demo-aud button.is-on{background:${ADOBE_RED};border-color:${ADOBE_RED};color:#fff}
-.eo-demo-account{width:100%}
-.eo-demo-account.is-on{background:#1a7f37;border-color:#1a7f37;color:#fff}
+.eo-demo-ident button small{display:block;font-weight:400;font-size:11px;color:#767676;margin-top:2px}
+.eo-demo-ident button.is-on{background:#1a7f37;border-color:#1a7f37;color:#fff}
+.eo-demo-ident button.is-on small{color:#d6f0dd}
 .eo-demo-reset{width:100%;padding:8px;border:0;background:none;color:${ADOBE_RED};cursor:pointer;font:inherit;font-weight:600}
 .eo-demo-exit{width:100%;padding:9px;border:1px solid #d9d9d9;border-radius:6px;background:#fff;color:#555;cursor:pointer;font:inherit;font-weight:600}
 .eo-demo-state{padding:10px 12px;border-radius:6px;background:#f4f4f4;font-size:13px}
@@ -210,10 +230,11 @@ function build() {
         <h4>Audience (implicit persona)</h4>
         <div class="eo-demo-aud"></div>
       </div>
+      ${PERSONAS.length ? `
       <div class="eo-demo-sec">
         <h4>Identity</h4>
-        <button class="eo-demo-account" type="button"></button>
-      </div>
+        <div class="eo-demo-ident"></div>
+      </div>` : ''}
       <div class="eo-demo-state">Current: <b class="eo-demo-statev">Anonymous</b></div>
       <button class="eo-demo-reset" type="button">Reset to anonymous</button>
       <button class="eo-demo-exit" type="button">Exit demo</button>
@@ -230,7 +251,7 @@ function build() {
     tab,
     panel,
     aud: panel.querySelector('.eo-demo-aud'),
-    account: panel.querySelector('.eo-demo-account'),
+    ident: panel.querySelector('.eo-demo-ident'),
     reset: panel.querySelector('.eo-demo-reset'),
     exit: panel.querySelector('.eo-demo-exit'),
     state: panel.querySelector('.eo-demo-statev'),
@@ -246,7 +267,15 @@ function build() {
     els.aud.append(b);
   });
 
-  els.account.addEventListener('click', () => setBuyer(ss.buyer() !== ACME));
+  PERSONAS.forEach((persona) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.dataset.persona = persona.id;
+    b.innerHTML = persona.note ? `${persona.label}<small>${persona.note}</small>` : persona.label;
+    b.addEventListener('click', () => setBuyer(persona.id));
+    els.ident.append(b);
+  });
+
   els.reset.addEventListener('click', reset);
   els.exit.addEventListener('click', exitDemo);
   tab.addEventListener('click', () => panel.classList.toggle('open'));
@@ -254,8 +283,14 @@ function build() {
 }
 
 export default function initDemoPanel() {
+  // Install the real Alloy queue FIRST, so the logger below wraps a live
+  // window.alloy instead of pre-empting it (see the file-header note).
+  initWebSDK();
   installAlloyLogger();
   build();
+  const buyer = ss.buyer();
+  if (buyer) window.brandCommerce?.useBuyer?.(buyer);
+  if (ss.audience()) window[AUD_GLOBAL] = ss.audience();
   render();
   renderEvents();
   // Emit the page view the Web SDK sends on load, so the inspector is populated.

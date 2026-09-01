@@ -1,8 +1,9 @@
 import { getMetadata } from './aem.js';
+import config from './aep-config.js';
 
 /**
  * Turn behavior into an audience signal, from two sources:
- *   - Brand Chat turns (the widget's `brand-concierge:message` event)
+ *   - Brand Chat turns (the widget's `config.chatEventName` event)
  *   - Knowledge Center (and any audience-tagged) page views
  *
  * Each signal (a) updates a per-session tally and sets window.eoAudience to the
@@ -11,30 +12,41 @@ import { getMetadata } from './aem.js';
  * Adobe via the Web SDK for unified-profile enrichment (GATED on window.alloy,
  * so it's inert until the SDK is configured; see websdk.js). Raw prompt text is
  * never sent — only the derived audience/topic.
+ *
+ * Audience segments + chat classification rules, the XDM tenant namespace,
+ * the chat event name, and the shared window.eoAudience/eo_-prefixed storage
+ * keys (see scripts/p13n.js) all come from aep-config.js — that's the only
+ * file a different site needs to edit to reuse this module.
  */
 
-const AUDIENCES = ['laser_research', 'bio_imaging', 'machine_vision'];
-const STORE_KEY = 'eo_audience_signal';
+const KEYS = {
+  override: 'aep_audience_override',
+  tally: 'aep_audience_signal',
+  ...config.storageKeys,
+};
+const AUD_GLOBAL = config.audienceGlobal || 'aepAudience';
 
-// Keyword → audience for classifying a chat turn (prompt + recommendations).
-const CHAT_RULES = [
-  ['laser_research', /laser|nd:?yag|ultrafast|femtosecond|1064|damage threshold|beam|high[- ]power/i],
-  ['bio_imaging', /microscop|fluoresc|confocal|\boct\b|objective|dichroic|\bbio|cell|life[- ]scienc/i],
-  ['machine_vision', /machine vision|inspection|\bswir\b|telecentric|fixed focal|\bsensor|camera|factory/i],
-];
+const AUDIENCES = config.audiences.map((a) => a.key);
 
-function inferFromChat(detail) {
-  const hay = [
-    detail.prompt || '',
-    ...(detail.recommendations || []).map((r) => `${r.title || ''} ${r.reason || ''}`),
-  ].join(' ');
-  const hit = CHAT_RULES.find(([, re]) => re.test(hay));
-  return hit ? hit[0] : 'default';
+/** Classify free text into a configured audience key, or 'default'. */
+export function classify(text) {
+  const hit = config.audiences.find(({ match }) => match.test(text || ''));
+  return hit ? hit.key : 'default';
+}
+
+/**
+ * Does this text read as belonging to `audience`? Exposed so block code can
+ * reorder/filter content by persona relevance using the same vocabulary the
+ * signal classifier uses.
+ */
+export function matchesAudience(text, audience) {
+  const rule = config.audiences.find((a) => a.key === audience);
+  return rule ? rule.match.test(text || '') : false;
 }
 
 function readTally() {
   try {
-    return JSON.parse(sessionStorage.getItem(STORE_KEY)) || {};
+    return JSON.parse(sessionStorage.getItem(KEYS.tally)) || {};
   } catch (e) {
     return {};
   }
@@ -52,27 +64,28 @@ function leadingAudience(tally) {
   return best;
 }
 
+function defaultEventType(source) {
+  return source === 'content' ? 'web.webpagedetails.pageViews' : 'experience.chat.interaction';
+}
+
 // Record one signal: bump the session tally (skipping the neutral 'default'),
 // promote the leading audience, and enrich the Adobe profile if the SDK is live.
-function recordSignal(audience, source, extra = {}) {
+export function recordSignal(audience, source, extra = {}) {
   if (audience && audience !== 'default') {
     const tally = readTally();
     tally[audience] = (tally[audience] || 0) + 1;
     try {
-      sessionStorage.setItem(STORE_KEY, JSON.stringify(tally));
+      sessionStorage.setItem(KEYS.tally, JSON.stringify(tally));
     } catch (e) { /* private mode — the signal is best-effort */ }
-    window.eoAudience = leadingAudience(tally) || window.eoAudience;
+    window[AUD_GLOBAL] = leadingAudience(tally) || window[AUD_GLOBAL];
   }
 
   if (typeof window.alloy === 'function') {
-    const eventType = source === 'content'
-      ? 'web.webpagedetails.pageViews'
-      : 'experience.chat.interaction';
+    const eventType = (config.eventTypeForSource || defaultEventType)(source);
     window.alloy('sendEvent', {
       xdm: {
         eventType,
-        // Placeholder tenant field group — map to the real AEP schema path.
-        _edmundoptics: { signal: { source, audience: audience || 'default', ...extra } },
+        [config.tenantId]: { signal: { source, audience: audience || 'default', ...extra } },
       },
     });
   }
@@ -83,21 +96,26 @@ function recordSignal(audience, source, extra = {}) {
 function applyStoredAudience() {
   let override = null;
   try {
-    override = sessionStorage.getItem('eo_audience_override');
+    override = sessionStorage.getItem(KEYS.override);
   } catch (e) { /* private mode */ }
   if (override) {
-    window.eoAudience = override;
+    window[AUD_GLOBAL] = override;
     return;
   }
   const lead = leadingAudience(readTally());
-  if (lead) window.eoAudience = lead;
+  if (lead) window[AUD_GLOBAL] = lead;
 }
 
 function wireChat() {
-  document.addEventListener('brand-concierge:message', (e) => {
+  if (!config.chatEventName) return;
+  document.addEventListener(config.chatEventName, (e) => {
     const detail = e.detail || {};
     if (detail.role !== 'assistant') return;
-    recordSignal(inferFromChat(detail), 'concierge', {
+    const hay = [
+      detail.prompt || '',
+      ...(detail.recommendations || []).map((r) => `${r.title || ''} ${r.reason || ''}`),
+    ].join(' ');
+    recordSignal(classify(hay), 'concierge', {
       recommendedCount: (detail.recommendations || []).length,
     });
   });
@@ -122,4 +140,5 @@ export default function initPersonalization() {
   applyStoredAudience();
   wireChat();
   recordContentView();
+  config.wireExtraSignals?.({ classify, recordSignal });
 }
